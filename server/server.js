@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 var route = require('./routes');
 
-app.get('/',function(req,res){
+app.get('/',(req,res) =>{
 	res.send('work');
 })
 // app.param('hotelNo',(req,res,next,hotelNo)=>{
