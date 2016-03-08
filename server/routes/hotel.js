@@ -1,17 +1,9 @@
 var express = require('express');
 var RoomRoute = require('./room');
 var router = express.Router();
+var pool = require('../service/mysqlConnect');
 
 
-var mysql = require('mysql');
-
-var pool  = mysql.createPool({
-	connectionLimit : 5,
-	host:'ylrent.mysqldb.chinacloudapi.cn',
-	user:'ylrent%jason',
-	password:'Password01!',
-	database:'ylrentdb'
-});
 
 
 router.get('/',(req,res)=>{

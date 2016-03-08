@@ -1,16 +1,6 @@
 var express = require('express');
 var router = express.Router();
-
-
-var mysql = require('mysql');
-
-var pool  = mysql.createPool({
-	connectionLimit : 5,
-	host:'ylrent.mysqldb.chinacloudapi.cn',
-	user:'ylrent%jason',
-	password:'Password01!',
-	database:'ylrentdb'
-});
+var pool = require('../service/mysqlConnect');
 
 router.get('/:roomNo',(req,res)=> {
 	pool.query('select * from room where roomNo = ?', req.params.roomNo,(err,result)=>{
