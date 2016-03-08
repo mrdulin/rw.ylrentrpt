@@ -4,8 +4,6 @@ var router = express.Router();
 var pool = require('../service/mysqlConnect');
 
 
-
-
 router.get('/',(req,res)=>{
 	//res.send('list');
 	pool.query('select * from hotel',(err,result)=>{
@@ -42,7 +40,7 @@ router.get('/:hotelNo',(req,res)=>{
 })
 
 router.get('/:hotelNo/room',(req,res)=>{
-	pool.query('select r.roomName, r.roomNo,r.hasLock,r.hotelNo,t.roomTypeNo,t.roomTypeName,t.roomTypePrice from room as r join room_type as t on r.roomTypeNo = t.roomTypeNo where r.hotelNo = ?',
+	pool.query('select r.roomName, r.roomNo,r.hasLock,r.hotelNo,h.hotelName,t.roomTypeNo,t.roomTypeName,t.roomTypePrice from room as r join room_type as t on r.roomTypeNo = t.roomTypeNo join hotel as h on r.hotelNo = h.hotelNo where r.hotelNo = ?',
 		req.params.hotelNo,(err,result)=>{
 			if(err)
 			{

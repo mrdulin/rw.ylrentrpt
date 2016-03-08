@@ -1,7 +1,9 @@
 var express = require('express');
 var app = express();
 var route = require('./routes');
+var bodyParser = require('body-parser');
 
+app.use(bodyParser());
 app.get('/',(req,res) =>{
 	res.send('work');
 })
@@ -13,7 +15,6 @@ app.get('/',(req,res) =>{
 app.use('/hotel',route.Hotel);
 app.use('/room',route.Room);
 app.use('/order',route.Order);
-
 
 app.listen('3000');
 console.log('listen on 3000');
