@@ -1,0 +1,75 @@
+var express = require('express');
+var RoomRoute = require('./room');
+var router = express.Router();
+
+
+var mysql = require('mysql');
+
+var pool  = mysql.createPool({
+	connectionLimit : 5,
+	host:'ylrent.mysqldb.chinacloudapi.cn',
+	user:'ylrent%jason',
+	password:'Password01!',
+	database:'ylrentdb'
+});
+
+
+router.get('/',(req,res)=>{
+	//res.send('list');
+	pool.query('select * from hotel',(err,result)=>{
+		if(err)
+		{
+			console.error(err);
+			return;
+		}
+
+		else
+		{
+			res.json(result);
+		
+		}
+
+	});
+});
+
+router.get('/:hotelNo',(req,res)=>{
+	if(!req.params.hotelNo){res.send('no hotel');return};
+	pool.query('select * from hotel where hotelNo = ?',req.params.hotelNo,(err,result)=>{
+		if(err)
+		{
+			console.error(err);
+			return;
+		}
+
+		else
+		{
+			if(result.length == 0 ) res.json('no such hotel');
+			res.json(result)
+		}
+	})
+})
+
+router.get('/:hotelNo/room',(req,res)=>{
+	pool.query('select r.roomName, r.roomNo,r.hasLock,r.hotelNo,t.roomTypeNo,t.roomTypeName,t.roomTypePrice from room as r join room_type as t on r.roomTypeNo = t.roomTypeNo where r.hotelNo = ?',
+		req.params.hotelNo,(err,result)=>{
+			if(err)
+			{
+				console.error(err);
+				return;
+			}
+
+			else
+			{
+				if(result.length == 0 ) res.json('no room found');
+				res.json(result);
+			}
+		}
+		)
+})
+
+router.use('/:hotelNo/room', RoomRoute);
+
+
+
+exports = module.exports = router;
+
