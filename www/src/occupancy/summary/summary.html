@@ -1,1 +1,19 @@
-<p>This is summary page</p>
+<div class="container-fuild">
+	<div class="row">
+		<div class="col-md-12">
+			<table class="table table-bordered table-hover">
+				<caption>hotel table</caption>
+				<thead>
+					<tr>
+						<th>酒店名称</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="hotel in vm.hotelList">
+						<td ng-bind="::hotel.hotelName"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

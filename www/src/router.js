@@ -2,11 +2,12 @@ angular
 	.module('ylrent.rpt')
 	.config(config);
 
-config.$inject = ['$stateProvider', '$urlRouterProvider'];
+config.$inject = ['$stateProvider', '$urlRouterProvider', '$resourceProvider'];
 
-function config($stateProvider, $urlRouterProvider) {
+function config($stateProvider, $urlRouterProvider, $resourceProvider) {
 
-	$urlRouterProvider.otherwise('/summary');
+	$urlRouterProvider.otherwise('/occupancy/summary');
+ 	$resourceProvider.defaults.stripTrailingSlashes = false;
 
 	$stateProvider
 		.state('occupancy', {
@@ -18,6 +19,15 @@ function config($stateProvider, $urlRouterProvider) {
 			url: '/summary',
 			templateUrl: './src/occupancy/summary/summary.html',
 			controller: 'SummaryController as vm',
+			resolve: {
+				hotelList: function(SummaryService) {
+					return SummaryService.query().then(function(data) {
+						return data.data;
+					}, function(error) {
+						alert(error);
+					});
+				}
+			},
 			custom: {
 				data: '汇总'
 			}
