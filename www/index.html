@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="ylrent.rpt">
+
+<head>
+    <meta charset="UTF-8">
+    <title>~</title>
+    <link rel="stylesheet" href="./node_modules/angular-material/angular-material.css">
+    <link rel="stylesheet" href="./node_modules/angular-material/angular-material.layouts.css">
+</head>
+
+<body ng-controller="MainController as vm" layout="column">
+
+	<div flex layout="row">
+
+        <!-- Container #3 -->
+        <md-sidenav md-is-locked-open="true" class="md-whiteframe-z2">
+        	<md-list ng-repeat="(key, obj) in vm.sidebar">
+        		<md-subheader class="md-no-sticky"  ng-bind="::obj.name"></md-subheader>
+        		<md-list-item class="md-3-line" ng-repeat="menu in obj.subMenus">
+        			<a ui-sref="{{menu.baseKey}}.{{menu.key}}" ng-bind="::menu.name"></a>
+        		</md-list-item>
+        	</md-list>
+        </md-sidenav>
+
+        <!-- Container #4 -->
+        <md-content flex id="content" ui-view>
+        </md-content>
+
+    </div>
+
+
+    <!-- libs -->
+    <script src="./node_modules/angular/angular.js"></script>
+    <script src="./node_modules/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="./node_modules/angular-resource/angular-resource.js"></script>
+    <script src="./node_modules/angular-animate/angular-animate.js"></script>
+    <script src="./node_modules/angular-aria/angular-aria.js"></script>
+    <script src="./node_modules/angular-material/angular-material.js"></script>
+
+
+    <!-- app -->
+    <script src="./src/app.js"></script>
+    <script src="./src/router.js"></script>
+    <script src="./src/occupancy/summary/summary.controller.js"></script>
+    <script src="./src/occupancy/summary/summary.service.js"></script>
+</body>
+
+</html>
