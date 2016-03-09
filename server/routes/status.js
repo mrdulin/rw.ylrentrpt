@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var pool = require('../service/mysqlConnect');
+var error = require('../error.js')
 
 
 //get status summary occupancy rate for all hotels, MAX 90 days
@@ -15,7 +16,7 @@ router.get('/start/:startdate/end/:enddate',(req,res) =>{
 
 			else
 			{
-				if(result.length == 0 ) res.json('no record found');
+				if(result.length == 0 ) res.status(501).json(error.NO_RECORD_FOUND);;
 				res.json(result);
 			}
 		});
@@ -33,7 +34,7 @@ router.get('/hotel/:hotelNo/start/:startdate/end/:enddate',(req,res)=>{
 
 			else
 			{
-				if(result.length == 0 ) res.json('no record found');
+				if(result.length == 0 ) res.status(501).json(error.NO_RECORD_FOUND);;
 				res.json(result);
 			}
 		});

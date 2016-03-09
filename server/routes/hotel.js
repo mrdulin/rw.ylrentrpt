@@ -2,7 +2,7 @@ var express = require('express');
 var RoomRoute = require('./room');
 var router = express.Router();
 var pool = require('../service/mysqlConnect');
-
+var error = require('../error.js')
 
 router.get('/',(req,res)=>{
 	//res.send('list');
@@ -34,7 +34,7 @@ router.get('/:hotelNo',(req,res)=>{
 
 		else
 		{
-			if(result.length == 0 ) res.json('no such hotel');
+			if(result.length == 0 ) res.status(501).json(error.NO_RECORD_FOUND);
 			res.json(result)
 		}
 	})
@@ -51,7 +51,7 @@ router.get('/:hotelNo/room',(req,res)=>{
 
 			else
 			{
-				if(result.length == 0 ) res.json('no room found');
+				if(result.length == 0 ) res.status(501).json(error.NO_RECORD_FOUND);
 				res.json(result);
 			}
 		}

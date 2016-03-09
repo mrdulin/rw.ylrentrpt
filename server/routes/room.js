@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var pool = require('../service/mysqlConnect');
 var moment = require('moment');
+var error = require('../error.js')
 
 router.get('/:roomNo',(req,res)=> {
 	console.log('in');
@@ -29,7 +30,7 @@ router.get('/:roomNo/order/start/:startdate/end/:enddate',(req,res)=>{
 		{
 			if(result.length==0) 
 			{
-				res.json("no order found");
+				res.status(501).json(error.NO_RECORD_FOUND);
 			}
 			else
 			{
@@ -54,7 +55,7 @@ router.get('/oooroom/start/:startdate/end/:enddate',(req,res)=>{
 		{
 			if(result.length==0)
 			{
-				res.json("no oooroom found");
+				res.status(501).json(error.NO_RECORD_FOUND);
 			}
 			else
 			{
