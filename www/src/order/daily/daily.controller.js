@@ -1,5 +1,5 @@
 angular
-	.module('ylrent.rpt.contollers')
+	.module('ylrent.rpt.controllers')
 	.controller('DailyController', DailyController);
 
 DailyController.$inject = ['$log'];

@@ -1,9 +1,7 @@
 angular.module('ylrent.rpt', [
 	'ui.router',
 	'ngResource',
-	'ngMaterial',
 	'ngAnimate',
-	'ngAria',
 	'ylrent.rpt.controllers',
 	'ylrent.rpt.services',
 ]);

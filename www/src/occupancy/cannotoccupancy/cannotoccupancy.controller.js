@@ -1,10 +1,10 @@
 angular
 	.module('ylrent.rpt.controllers')
-	.controller('CannotoccpancyController', CannotoccpancyController);
+	.controller('CannotoccupancyController', CannotoccupancyController);
 
-CannotoccpancyController.$inject = ['$log'];
+CannotoccupancyController.$inject = ['$log'];
 
-function CannotoccpancyController($log) {
+function CannotoccupancyController($log) {
 	var vm = this;
 	
 }

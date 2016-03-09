@@ -4,9 +4,9 @@ var route = require('./routes');
 var bodyParser = require('body-parser');
 
 app.use(bodyParser());
-app.get('/',(req,res) =>{
-	res.send('work');
-})
+// app.get('/',(req,res) =>{
+// 	res.send('work');
+// })
 
 app.use(express.static('../www'));
 
