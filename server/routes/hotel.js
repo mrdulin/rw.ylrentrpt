@@ -22,6 +22,7 @@ router.get('/',(req,res)=>{
 	});
 });
 
+
 router.get('/:hotelNo',(req,res)=>{
 	if(!req.params.hotelNo){res.send('no hotel');return};
 	pool.query('select * from hotel where hotelNo = ?',req.params.hotelNo,(err,result)=>{
