@@ -15,6 +15,7 @@ app.get('/',(req,res) =>{
 app.use('/hotel',route.Hotel);
 app.use('/room',route.Room);
 app.use('/order',route.Order);
+app.use('/status',route.Status);
 
 app.listen('3000');
 console.log('listen on 3000');
