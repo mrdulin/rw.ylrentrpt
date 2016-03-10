@@ -10,6 +10,7 @@ function config($stateProvider, $urlRouterProvider, $resourceProvider) {
 		.when('', '/occupancy/summary')
 		.when('/occupancy', '/occupancy/summary')
 		.otherwise('/occupancy/summary');
+
  	$resourceProvider.defaults.stripTrailingSlashes = false;
 
 	$stateProvider
@@ -24,10 +25,19 @@ function config($stateProvider, $urlRouterProvider, $resourceProvider) {
 			controller: 'SummaryController as vm',
 			resolve: {
 				summarys: function(SummaryService, $log) {
-					return SummaryService.getSummary().$promise.then(function(data) {
+					var today = moment().format('YYYY-M-DD');
+					var date = {startDate: today, endDate: today};
+					return SummaryService.getSummary(date).$promise.then(function(data) {
+						return SummaryService.setOccupancyRate(data);
+					}, function(error) {
+						alert(error.msg);
+					});
+				},
+				hotels: function(SummaryService, $log) {
+					return SummaryService.getHotels().$promise.then(function(data) {
 						return data;
 					}, function(error) {
-						alert(error);
+						alert(error.msg);
 					});
 				}
 			},

@@ -5,8 +5,11 @@ angular
 
 Hotel.$inject = ['$resource'];
 
-function Hotel() {
-	return $resource('/api/hotel', paramDefaults, actions)
+function Hotel($resource) {
+	var url = '/api/hotel';
+	return $resource(url, {
+		query: {method: 'GET', isArray: true}
+	});
 }
 
 Status.$inject = ['$resource'];
@@ -17,5 +20,6 @@ function Status($resource) {
 		actions = {
 			query: {method: 'GET', isArray: true}
 		};
+
 	return $resource(url, paramDefaults, actions);
 }
