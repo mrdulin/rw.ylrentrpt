@@ -11,7 +11,7 @@ router.get('/:roomNo',(req,res)=> {
 		{
 			console.error(err)
 		}
-		if(result.length ==0) {result.json("no room found");return;}
+		//if(result.length ==0) {result.json("no room found");return;}
 		res.json(result);
 	})
 })
@@ -28,14 +28,9 @@ router.get('/:roomNo/order/start/:startdate/end/:enddate',(req,res)=>{
 
 		else
 		{
-			if(result.length==0) 
-			{
-				res.status(501).json(error.NO_RECORD_FOUND);
-			}
-			else
-			{
-				res.json(result);
-			}
+
+			res.json(result);
+			
 		}
 	})
 
@@ -53,14 +48,9 @@ router.get('/oooroom/start/:startdate/end/:enddate',(req,res)=>{
 		}
 		else
 		{
-			if(result.length==0)
-			{
-				res.status(501).json(error.NO_RECORD_FOUND);
-			}
-			else
-			{
-				res.json(result);
-			}
+
+			//res.json(result);
+			
 		}
 	 })
 })

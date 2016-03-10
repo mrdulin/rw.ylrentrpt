@@ -14,14 +14,9 @@ router.get('/:orderNo',(req,res)=>{
 		}
 		else
 		{
-			if(result.length ==0 )
-			{
-				res.status(501).json(error.NO_RECORD_FOUND);
-			}
-			else
-			{
+			
 				res.json(result);
-			}
+			
 		}
 	})
 })
@@ -36,14 +31,9 @@ router.get('/checkin/start/:startdate/end/:enddate',(req,res)=>{
 		}
 		else
 		{
-			if(result.length == 0 )
-			{
-				res.status(501).json(error.NO_RECORD_FOUND);
-			}
-			else
-			{
-				res.json(result);
-			}
+
+			res.json(result);
+			
 		}
 	})
 })
@@ -58,21 +48,25 @@ router.get('/checkout/start/:startdate/end/:enddate',(req,res)=>{
 		}
 		else
 		{
-			if(result.length == 0 )
-			{
-				res.status(501).json(error.NO_RECORD_FOUND);
-			}
-			else
-			{
+
 				res.json(result);
-			}
+		
 		}
 	})
 })
 
 
 router.get('/dailyrents/start/:startdate/end/:enddate',(req,res)=>{
-	pool.query("select roomNo,RoomName,hotelNo,hotelName,checkintime,checkouttime,customer,orderNo,rentalType,rentalPerDay,telno,channelName,rentMoney,statusName,orderTypeName,handwork_desc orders where cast(checkintime) <= ? and checkOutDate>= ? and customer NOT REGEXP '维修|装修|准备|无房|投诉|家具|打扫|交房|开荒|看房' order by checkOutDate",[req.params.enddate,req.params.startdate],(err,result)=>{
+	var contractnoList = [];
+	alirdspool.query('SELECT title,contractno  FROM tbl_house',(err,result)=>{
+		if(err)
+		{
+			console.log(err);
+			return;
+		}
+		contractnoList = result;
+	});
+	pool.query("select roomNo,RoomName,hotelNo,hotelName,checkintime,checkouttime,customer,orderNo,rentalType,rentalPerDay,telno,channelName,rentMoney,statusName,orderTypeName,handwork_desc from to_check_out_list limit 10",[req.params.enddate,req.params.startdate],(err,result)=>{
 		if(err)
 		{
 			console.error(err);
@@ -80,28 +74,27 @@ router.get('/dailyrents/start/:startdate/end/:enddate',(req,res)=>{
 		}
 		else
 		{
-			if(result.length == 0 )
-			{
-				res.status(501).json(error.NO_RECORD_FOUND);
-			}
-			else
-			{
-				res.json(result);
-			}
+
+			result.map((row)=>{
+				//console.log(row.hotelName);
+				
+			})
+			
 		}
+		res.send("done");
 	})
 })
 
 
 router.get('/ali/list',(req,res)=>{
-	console.log('in');
-	alirdspool.query('SELECT contractno  FROM tbl_house',(err,result)=>{
+	var contractnoList = [];
+	alirdspool.query('SELECT title,contractno  FROM tbl_house',(err,result)=>{
 		if(err)
 		{
 			console.log(err);
 			return;
 		}
-		res.json(result);
+		contractnoList = result;
 	})
 })
 
