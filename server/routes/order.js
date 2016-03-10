@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var pool = require('../service/mysqlConnect');
+var alirdspool = require('../service/alimysqlConnect');
 var error = require('../error.js')
 
 
@@ -88,6 +89,19 @@ router.get('/dailyrents/start/:startdate/end/:enddate',(req,res)=>{
 				res.json(result);
 			}
 		}
+	})
+})
+
+
+router.get('/ali/list',(req,res)=>{
+	console.log('in');
+	alirdspool.query('SELECT contractno  FROM tbl_house',(err,result)=>{
+		if(err)
+		{
+			console.log(err);
+			return;
+		}
+		res.json(result);
 	})
 })
 
