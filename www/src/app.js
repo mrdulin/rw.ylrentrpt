@@ -2,6 +2,8 @@ angular.module('ylrent.rpt', [
 	'ui.router',
 	'ngResource',
 	'ngAnimate',
+	'ui.bootstrap',
+	'ngTouch',
 	'ylrent.rpt.controllers',
 	'ylrent.rpt.services',
 ]);

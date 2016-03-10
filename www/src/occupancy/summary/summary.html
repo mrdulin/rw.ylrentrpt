@@ -1,19 +1,74 @@
 <div class="container-fuild">
-	<div class="row">
-		<div class="col-md-12">
-			<table class="table table-bordered table-hover">
-				<caption>hotel table</caption>
-				<thead>
-					<tr>
-						<th>酒店名称</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr ng-repeat="hotel in vm.hotelList">
-						<td ng-bind="::hotel.hotelName"></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-md-3">
+    		起始时间:
+            <p class="input-group">
+        		<input type="text" 
+                	class="form-control" 
+                	ng-model="vm.datepicker.start" 
+                	is-open="vm.datepicker.startOpen" 
+                	uib-datepicker-popup
+                	datepicker-options="vm.datepicker.options" 
+                	current-text="今天"
+                	clear-text="清除"
+                	close-text="关闭"/>
+
+                <span class="input-group-btn">
+	            	<button type="button" class="btn btn-default" ng-click="vm.datepicker.startOpen = true;">
+	            		<i class="glyphicon glyphicon-calendar"></i>
+	            	</button>
+	          	</span>
+            </p>
+        </div>
+        <div class="col-md-3">
+    		结束时间:
+            <p class="input-group">
+        		<input type="text" 
+                	class="form-control" 
+                	ng-model="vm.datepicker.end" 
+                	is-open="vm.datepicker.endOpen" 
+                	uib-datepicker-popup
+                	datepicker-options="vm.datepicker.options" 
+                	current-text="今天"
+                	clear-text="清除"
+                	close-text="关闭"/>
+
+                <span class="input-group-btn">
+	            	<button type="button" class="btn btn-default" ng-click="vm.datepicker.endOpen = true;">
+	            		<i class="glyphicon glyphicon-calendar"></i>
+	            	</button>
+	          	</span>
+            </p>
+        </div>
+        <div class="col-md-3">
+        	<p>当日在住数：<span ng-bind="::vm.occupany.occupany"></span>&nbsp;&nbsp;/&nbsp;&nbsp;<span ng-bind="::vm.occupany.total"></span></p>
+        </div>
+        <div class="col-md-3">
+        	<p>当日不可用房：<span></span>&nbsp;&nbsp;/&nbsp;&nbsp;<span></span></p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-7">
+            <table class="table table-bordered table-hover">
+                <caption>status table</caption>
+                <thead>
+                    <tr>
+                        <th>日期</th>
+                        <th>小区</th>
+                        <th>入住率</th>
+                        <th>不可用房</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="summary in vm.summarys">
+                        <td ng-bind="::summary.statusDate.substr(0, 10)"></td>
+                        <td ng-bind="::summary.hotelName"></td>
+                        <td ng-if="summary.TotalRoomCount === 0">-</td>
+                        <td ng-if="summary.TotalRoomCount !== 0" ng-bind="::(summary.occupyRoomCount / summary.TotalRoomCount * 100 | number: 2) + '%'"></td>
+                        <td ng-bind="::summary.oooRoomCount"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>

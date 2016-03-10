@@ -6,7 +6,10 @@ config.$inject = ['$stateProvider', '$urlRouterProvider', '$resourceProvider'];
 
 function config($stateProvider, $urlRouterProvider, $resourceProvider) {
 
-	$urlRouterProvider.otherwise('/occupancy/summary');
+	$urlRouterProvider
+		.when('', '/occupancy/summary')
+		.when('/occupancy', '/occupancy/summary')
+		.otherwise('/occupancy/summary');
  	$resourceProvider.defaults.stripTrailingSlashes = false;
 
 	$stateProvider
@@ -20,9 +23,9 @@ function config($stateProvider, $urlRouterProvider, $resourceProvider) {
 			templateUrl: './src/occupancy/summary/summary.html',
 			controller: 'SummaryController as vm',
 			resolve: {
-				hotelList: function(SummaryService) {
-					return SummaryService.query().then(function(data) {
-						return data.data;
+				summarys: function(SummaryService, $log) {
+					return SummaryService.getSummary().$promise.then(function(data) {
+						return data;
 					}, function(error) {
 						alert(error);
 					});
