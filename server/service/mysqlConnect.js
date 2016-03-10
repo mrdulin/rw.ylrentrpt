@@ -6,7 +6,7 @@ var pool  = mysql.createPool({
 	user:'ylrent%jason',
 	password:'Password01!',
 	database:'ylrentdb',
-	timezone:'utc'
+	timezone:'utc'  // this is for time convert 
 });
 
 exports = module.exports = pool;
