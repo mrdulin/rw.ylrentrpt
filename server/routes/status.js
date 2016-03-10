@@ -16,7 +16,7 @@ router.get('/start/:startdate/end/:enddate',(req,res) =>{
 
 			else
 			{
-				if(result.length == 0 ) res.status(501).json(error.NO_RECORD_FOUND);;
+				//if(result.length == 0 ) res.status(501).json(error.NO_RECORD_FOUND);;
 				res.json(result);
 			}
 		});
@@ -34,7 +34,7 @@ router.get('/hotel/:hotelNo/start/:startdate/end/:enddate',(req,res)=>{
 
 			else
 			{
-				if(result.length == 0 ) res.status(501).json(error.NO_RECORD_FOUND);;
+				//if(result.length == 0 ) res.status(501).json(error.NO_RECORD_FOUND);;
 				res.json(result);
 			}
 		});
