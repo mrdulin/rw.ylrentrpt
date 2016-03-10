@@ -5,7 +5,8 @@ var pool  = mysql.createPool({
 	host:'ylrent.mysqldb.chinacloudapi.cn',
 	user:'ylrent%jason',
 	password:'Password01!',
-	database:'ylrentdb'
+	database:'ylrentdb',
+	timezone:'utc'
 });
 
 exports = module.exports = pool;
