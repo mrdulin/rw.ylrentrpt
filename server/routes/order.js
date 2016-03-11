@@ -65,24 +65,29 @@ router.get('/dailyrents/start/:startdate/end/:enddate',(req,res)=>{
 			return;
 		}
 		contractnoList = result;
-	});
-	pool.query("select roomNo,RoomName,hotelNo,hotelName,checkintime,checkouttime,customer,orderNo,rentalType,rentalPerDay,telno,channelName,rentMoney,statusName,orderTypeName,handwork_desc from to_check_out_list limit 10",[req.params.enddate,req.params.startdate],(err,result)=>{
-		if(err)
-		{
-			console.error(err);
-			return;
-		}
-		else
-		{
-
-			result.map((row)=>{
-				//console.log(row.hotelName);
+		pool.query("select roomNo,RoomName,hotelNo,hotelName,checkintime,checkouttime,customer,orderNo,rentalType,rentalPerDay,telno,channelName,rentMoney,statusName,orderTypeName,handwork_desc from to_check_out_list limit 10",[req.params.enddate,req.params.startdate],(err1,result1)=>{
+			if(err1)
+			{
+				console.error(err);
+				return;
+			}
+			else
+			{
+				result1.map((row)=>{
+					console.log('finding  ',row.hotelName+row.roomName);
+					var a = contractnoList.find((item)=>{
+						return item.title.replace(' ','') == row.hotelName+row.roomName;
+					});
+					row["contractno"] = a.contractno;
+				})
 				
-			})
-			
-		}
-		res.send("done");
-	})
+			}
+			res.send(result1);
+		})
+
+	});
+	//console.log(contractnoList);
+	
 })
 
 
