@@ -2,8 +2,14 @@
 	cursor: pointer;
 }
 
+.tc{text-align: center;}
+
 #summary input + .dropdown-menu{
-	width: 100%;
+	width: calc(100% - 30px);
 	max-height: 200px;
 	overflow: auto;
+}
+
+body{
+	font-family: 'Microsoft Yahei';
 }

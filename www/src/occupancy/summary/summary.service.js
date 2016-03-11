@@ -11,23 +11,17 @@ function SummaryService($log, $resource, Status, Hotel) {
 	angular.extend(service, {
 		getSummary: getSummary,
 		getOccupanySum: getOccupanySum,
-		getPageSummarys: getPageSummarys,
 		setOccupancyRate: setOccupancyRate,
-		getHotels: getHotels
+		getHotels: getHotels		
 	});
+
+
 
 	function setOccupancyRate(summarys) {
 		angular.forEach(summarys, function(summary){
 			summary.occupanyRate = (summary.occupyRoomCount / summary.TotalRoomCount).toFixed(2);
 		});
 		return summarys;
-	}
-
-	function getPageSummarys(currentPage, pageSize, summarys) {
-
-		var index = currentPage - 1;
-
-		return summarys.slice(index, index + pageSize - 1);
 	}
 
 	function getOccupanySum(summarys) {

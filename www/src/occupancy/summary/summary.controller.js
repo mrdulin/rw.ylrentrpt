@@ -2,9 +2,9 @@ angular
 	.module('ylrent.rpt.controllers')
 	.controller('SummaryController', SummaryController);
 
-SummaryController.$inject = ['$log', 'SummaryService', 'summarys', 'hotels', '$filter', '$scope'];
+SummaryController.$inject = ['$log', 'SummaryService', 'summarys', 'hotels', '$filter', '$scope', 'CommonService'];
 
-function SummaryController($log, SummaryService, summarys, hotels, $filter, $scope){
+function SummaryController($log, SummaryService, summarys, hotels, $filter, $scope, CommonService){
 	var vm = this;
 
 	angular.extend(vm, {
@@ -81,7 +81,7 @@ function SummaryController($log, SummaryService, summarys, hotels, $filter, $sco
 	pageChanged();
 	function pageChanged(customSummarys) {
 		var summaryDatas = customSummarys || vm.summarys;
-		vm.pageSummarys = SummaryService.getPageSummarys(vm.pagination.currentPage, vm.pagination.pageSize, summaryDatas);
+		vm.pageSummarys = CommonService.getPage(vm.pagination.currentPage, vm.pagination.pageSize, summaryDatas);
 	}
 
 	function order(predicate) {

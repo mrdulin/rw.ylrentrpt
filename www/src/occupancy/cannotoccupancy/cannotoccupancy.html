@@ -1,1 +1,53 @@
-<p>This is 不可用房 page</p>
+<div id="cannotoccupancy" class="container-fuild">
+	<div class="row">
+		<div class="col-md-12">
+			<table class="table table-bordered table-hover">
+				<caption><span ng-bind="::vm.date"></span>不可用房数据表格</caption>
+				<thead>
+					<tr>
+						<th>小区</th>
+						<th>交房</th>
+						<th>未交房</th>
+						<th>未装修</th>
+						<th>装修中</th>
+						<th>开荒打扫</th>
+						<th>待送家具</th>
+						<th>维修</th>
+						<th>长租准备</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="(hotelName, statusMap) in vm.rooms">
+						<td ng-bind="::hotelName"></td>
+						<td ng-bind="::statusMap.deliver"></td>
+						<td ng-bind="::statusMap.notDelivered"></td>
+						<td ng-bind="::statusMap.notDecorated"></td>
+						<td ng-bind="::statusMap.decorating"></td>
+						<td ng-bind="::statusMap.clean"></td>
+						<td ng-bind="::statusMap.pendingFurniture"></td>
+						<td ng-bind="::statusMap.repair"></td>
+						<td ng-bind="::statusMap.longRent"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<!-- <div class="row">
+		<div class="col-md-12 clearfix">
+			<uib-pagination 
+             	items-per-page="vm.pagination.pageSize"
+             	boundary-links="true"
+             	class="pull-right"
+             	previous-text="&lsaquo;" 
+             	next-text="&rsaquo;" 
+             	first-text="&laquo;" 
+             	last-text="&raquo;"
+             	max-size="vm.pagination.maxSize"
+             	total-items="vm.pagination.totalItems" 
+             	ng-model="vm.pagination.currentPage" 
+             	ng-change="vm.pageChanged()">
+             	</uib-pagination>
+		</div>
+	</div> -->
+</div>

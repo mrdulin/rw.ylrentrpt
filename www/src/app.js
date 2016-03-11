@@ -5,7 +5,7 @@ angular.module('ylrent.rpt', [
 	'ui.bootstrap',
 	'ngTouch',
 	'ylrent.rpt.controllers',
-	'ylrent.rpt.services',
+	'ylrent.rpt.services'
 ]);
 
 angular.module('ylrent.rpt.controllers', []);

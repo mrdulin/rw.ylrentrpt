@@ -37,17 +37,17 @@
 	          	</span>
             </p>
         </div>
-        <div class="col-md-3">
-        	<p>所选日期在住数：<span ng-bind="vm.occupany.occupany"></span>&nbsp;&nbsp;/&nbsp;&nbsp;<span ng-bind="vm.occupany.total"></span></p>
+        <div class="col-md-12">
+        	<p>所选日期在住数/总数：<span ng-bind="vm.occupany.occupany"></span>&nbsp;&nbsp;/&nbsp;&nbsp;<span ng-bind="vm.occupany.total"></span></p>
         </div>
-        <div class="col-md-3">
-        	<p>所选日期不可用房：<span></span>&nbsp;&nbsp;/&nbsp;&nbsp;<span></span></p>
+        <div class="col-md-12">
+        	<p>所选日期不可用房/总数：<span></span>&nbsp;&nbsp;/&nbsp;&nbsp;<span></span></p>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
             <table class="table table-bordered table-hover">
-                <caption>status table</caption>
+                <caption>汇总数据表格</caption>
                 <thead>
                     <tr>
                         <!-- <th>日期</th> -->
@@ -67,13 +67,19 @@
                         <td ng-bind="summary.hotelName"></td>
                         <td ng-if="summary.TotalRoomCount === 0">-</td>
                         <td ng-if="summary.TotalRoomCount !== 0" ng-bind="summary.occupanyRate * 100 + '%'"></td>
-                        <td ng-bind="summary.oooRoomCount"></td>
                         <td ng-bind="summary.occupyRoomCount"></td>
+                        <td ng-bind="summary.oooRoomCount"></td>
                         <td ng-bind="summary.TotalRoomCount"></td>
                     </tr>
                 </tbody>
             </table>
         </div>
+    </div>
+
+    <div class="row" ng-if="vm.pageSummarys.length === 0">
+    	<div class="col-md-12">
+    		<p class="tc">暂无数据</p>
+    	</div>
     </div>
     <div class="row">
     	<div class="col-md-12 clearfix">
