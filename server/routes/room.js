@@ -37,9 +37,9 @@ router.get('/:roomNo/order/start/:startdate/end/:enddate',(req,res)=>{
 })
 
 //get the oooroom for all rooms starting from the startdate
-router.get('/oooroom/start/:startdate/end/:enddate',(req,res)=>{
-	 var query = pool.query("select orderNo,customer as oooReason, cast(checkintime as date) as oooDate, r.roomNo, r.roomName,h.hotelName, h.hotelNo from orders as o join room as r on o.roomNo = r.roomNo join hotel as h on r.hotelNo = h.hotelNo where (customer like '%交房%' or customer like '%打扫%' or customer like '%家具%' or customer like'%投诉%' or customer like'%无房%' or customer like '%装修%' or customer like '%维修%' or customer like '%长租准备%')  and  cast(checkintime as date) >= ? and cast(checkintime as date) <= ?",
-	 	[req.params.startdate,req.params.enddate],(err,result)=>{
+router.get('/oooroom/date/:date',(req,res)=>{
+	 var query = pool.query("select orderNo,customer as oooReason, cast(checkintime as date) as oooDate, r.roomNo, r.roomName,h.hotelName, h.hotelNo from orders as o join room as r on o.roomNo = r.roomNo join hotel as h on r.hotelNo = h.hotelNo where customer Regexp '交房|打扫|家具|投诉|无房|装修|维修|长租准备'  and  cast(checkouttime as date) >= ? and cast(checkintime as date) <= ?",
+	 	[req.params.date,req.params.date],(err,result)=>{
 	 		console.log(query.sql);
 		if(err)
 		{
@@ -49,7 +49,7 @@ router.get('/oooroom/start/:startdate/end/:enddate',(req,res)=>{
 		else
 		{
 
-			//res.json(result);
+			res.json(result);
 			
 		}
 	 })
