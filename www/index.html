@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="./node_modules/bootstrap/dist/css/bootstrap-theme.css">
     <link rel="stylesheet" type="text/css" href="./node_modules/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="./node_modules/bootstrap-daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" type="text/css" href="./node_modules/angular-loading-bar/build/loading-bar.css">
     <link rel="stylesheet" type="text/css" href="./src/site.css">
 </head>
 
@@ -32,7 +33,7 @@
 				<div ng-repeat="(key, obj) in vm.sidebar">
 					<h5 ng-bind="::obj.name"></h5>
 					<div class="list-group">
-						<a class="list-group-item" ng-repeat="menu in obj.subMenus" ui-sref="{{menu.baseKey}}.{{menu.key}}" ng-bind="::menu.name"></a>
+						<a class="list-group-item" ui-sref-active="active" ng-repeat="menu in obj.subMenus" ui-sref="{{menu.baseKey}}.{{menu.key}}" ui-sref-opts="{reload: true}" ng-bind="::menu.name"></a>
 					</div>
 				</div>
 			</div>
@@ -53,6 +54,7 @@
     <script src="./node_modules/jquery/dist/jquery.js"></script>
     <script src="./node_modules/bootstrap-daterangepicker/daterangepicker.js"></script>
     <script src="./node_modules/angular-daterangepicker/js/angular-daterangepicker.js"></script>
+    <script src="./node_modules/angular-loading-bar/build/loading-bar.js"></script>
 
 
     <!-- app -->

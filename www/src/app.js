@@ -1,6 +1,7 @@
 angular.module('ylrent.rpt', [
 	'ui.router',
 	'ngResource',
+	'angular-loading-bar',
 	'ngAnimate',
 	'ui.bootstrap',
 	'ngTouch',

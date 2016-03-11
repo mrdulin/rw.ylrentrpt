@@ -1,1 +1,70 @@
-<p>明日退房</p>
+<div id="checkout" class="container-fluid">
+	<div class="row">
+		<div class="col-md-3 date-picker-control">
+			<label for="dateRangePicker">日期选择</label>
+			<input date-range-picker
+				id="dateRangePicker" 
+				options="vm.datePicker.options"
+				class="form-control date-picker" 
+				type="text" 
+				ng-model="vm.datePicker.date"/>
+			<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+		</div>
+		<div class="col-md-2">
+			<label for="rentType">租赁类型</label>
+			<select id="rentType" class="form-control wp100"
+				ng-model="vm.rentType" 
+				ng-options="cn as cn for (en, cn) in vm.rentTypeMap">
+			</select>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<table class="table table-bordered table-hover">
+				<caption>退房数据统计</caption>
+				<thead>
+					<tr>
+						<th class="cursor-pointer" ng-click="vm.order('hotelName');">
+                        	小区
+                        	<span ng-if="vm.predicate" 
+                        		ng-class="{'glyphicon-triangle-bottom': vm.reverse, 'glyphicon-triangle-top': !vm.reverse}" 
+                        		class="glyphicon">
+                        	</span>
+                    	</th>
+						<th>房号</th>
+						<th>入住客人</th>
+						<th>离店时间</th>
+						<th>入住时间</th>
+						<th>租赁类型</th>
+						<th>备注</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="data in vm.datas | filter: {rentalType: vm.rentType === '全部' ? '' : vm.rentType} | orderBy:vm.predicate:vm.reverse">
+						<td ng-bind="data.hotelName"></td>
+						<td ng-bind="data.roomName"></td>
+						<td ng-bind="data.customer"></td>
+						<td ng-bind="vm.formatDate(data.checkouttime)"></td>	
+						<td ng-bind="vm.formatDate(data.checkintime)"></td>					
+						<td ng-bind="data.rentalType"></td>
+						<td >
+							<a tooltip-trigger="outsideClick" 
+								tooltip-placement="left"
+								uib-tooltip="{{data.handwork_desc}}" 
+								ng-class="{'cursor-pointer': data.handwork_desc, disabled: data.handwork_desc.length === 0}"
+								ng-disabled="data.handwork_desc.length === 0">
+								查看
+							</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div class="row" ng-if="vm.datas.length === 0">
+		<div class="col-md-12">
+			<p class="tc">暂无数据</p>
+		</div>
+	</div>	
+</div>

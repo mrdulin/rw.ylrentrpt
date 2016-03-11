@@ -2,9 +2,9 @@ angular
 	.module('ylrent.rpt')
 	.config(config);
 
-config.$inject = ['$stateProvider', '$urlRouterProvider', '$resourceProvider'];
+config.$inject = ['$stateProvider', '$urlRouterProvider', '$resourceProvider', 'cfpLoadingBarProvider'];
 
-function config($stateProvider, $urlRouterProvider, $resourceProvider) {
+function config($stateProvider, $urlRouterProvider, $resourceProvider, cfpLoadingBarProvider) {
 
 	$urlRouterProvider
 		.when('', '/occupancy/summary')
@@ -12,6 +12,8 @@ function config($stateProvider, $urlRouterProvider, $resourceProvider) {
 		.otherwise('/occupancy/summary');
 
  	$resourceProvider.defaults.stripTrailingSlashes = false;
+
+ 	cfpLoadingBarProvider.includeSpinner = false;
 
 	$stateProvider
 		.state('occupancy', {

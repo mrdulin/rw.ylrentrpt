@@ -5,6 +5,8 @@ angular
 	.factory('Status', Status)
 	.factory('Room', Room)
 	.factory('CheckIn', CheckIn)
+	.factory('CheckOut', CheckOut)
+	.factory('DailyRent', DailyRent)
 
 Hotel.$inject = ['$resource'];
 
@@ -42,11 +44,32 @@ function Room($resource) {
 CheckIn.$Inject = ['$resource'];
 
 function CheckIn($resource) {
-	var url = 'api/order/checkin/start/:startdate/end/:enddate',
+	var url = '/api/order/checkin/start/:startdate/end/:enddate',
 		paramDefaults = {startdate: '@sDate', enddate: '@eDate'},
 		actions = {
 			query: {method: 'GET', isArray: true}
 		};
+	return $resource(url, paramDefaults, actions);
+}
+
+function CheckOut($resource) {
+	var url = '/api/order/checkout/start/:startdate/end/:enddate',
+		paramDefaults = {startdate: '@sDate', enddate: '@eDate'},
+		actions = {
+			query: {method: 'GET', isArray: true}
+		};
+	return $resource(url, paramDefaults, actions);
+}
+
+DailyRent.$inject = ['$resource'];
+
+function DailyRent($resource) {
+	var url = '/api/order/dailyrents/start/:startdate/end/:enddate',
+		paramDefaults = {startdate: '@sDate', enddate: '@eDate'},
+		actions = {
+			query: {method: 'GET', isArray: true}
+		};
+
 	return $resource(url, paramDefaults, actions);
 }
 
