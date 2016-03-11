@@ -13,3 +13,17 @@
 body{
 	font-family: 'Microsoft Yahei';
 }
+
+.wp100{width: 100%;}
+
+.date-picker-control i{
+	position: absolute;
+    bottom: 10px;
+    right: 24px;
+    top: auto;
+    cursor: pointer;
+}
+
+a.disabled{
+	color: #ddd;
+}

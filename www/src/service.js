@@ -4,6 +4,7 @@ angular
 	.factory('Hotel', Hotel)
 	.factory('Status', Status)
 	.factory('Room', Room)
+	.factory('CheckIn', CheckIn)
 
 Hotel.$inject = ['$resource'];
 
@@ -38,6 +39,17 @@ function Room($resource) {
 	return $resource(url, paramDefaults, actions);
 }
 
+CheckIn.$Inject = ['$resource'];
+
+function CheckIn($resource) {
+	var url = 'api/order/checkin/start/:startdate/end/:enddate',
+		paramDefaults = {startdate: '@sDate', enddate: '@eDate'},
+		actions = {
+			query: {method: 'GET', isArray: true}
+		};
+	return $resource(url, paramDefaults, actions);
+}
+
 CommonService.$inject = ['$log'];
 
 function CommonService($log) {
@@ -45,7 +57,8 @@ function CommonService($log) {
 	var service = {};
 
 	angular.extend(service, {
-		getPage: getPage
+		getPage: getPage,
+		formatDate: formatDate
 	});
 
 	function getPage(currentPage, pageSize, totalItems) {
@@ -53,6 +66,15 @@ function CommonService($log) {
 		var index = currentPage - 1;	
 
 		return totalItems.slice(index, index + pageSize - 1);
+	}
+
+	/**
+	 * 格式化日期
+	 * @param  {[type]} date 如"2016-03-11T14:00:00.000Z"
+	 * @return {[type]}      "2016-3-11"
+	 */
+	function formatDate(date) {
+		return moment(date).format('YYYY-M-D');
 	}
 
 	return service;

@@ -1,8 +1,8 @@
 <div id="summary" class="container-fuild">
     <div class="row">
     	<div class="col-md-3">
-    			选择小区：
-    		<input type="text" 
+    		<label for="selectHotel">选择小区</label>
+    		<input id="selectHotel" type="text" 
     			ng-model="vm.selectedHotel" 
     			placeholder="输入小区名称" 
     			uib-typeahead="hotel as hotel.hotelName for hotel in vm.hotels | filter: {hotelName: $viewValue}" 
@@ -17,9 +17,9 @@
 		    </div>
     	</div>
         <div class="col-md-3">
-        	日期选择:
-            <p class="input-group">
-        		<input type="text" 
+        	<label for="datePicker">日期选择</label>
+            <div class="input-group">
+        		<input id="datePicker" type="text" 
                 	class="form-control" 
                 	ng-model="vm.datepicker.date" 
                 	is-open="vm.datepicker.open" 
@@ -35,12 +35,12 @@
 	            		<i class="glyphicon glyphicon-calendar"></i>
 	            	</button>
 	          	</span>
-            </p>
+            </div>
         </div>
-        <div class="col-md-12">
+        <div class="col-md-3">
         	<p>所选日期在住数/总数：<span ng-bind="vm.occupany.occupany"></span>&nbsp;&nbsp;/&nbsp;&nbsp;<span ng-bind="vm.occupany.total"></span></p>
         </div>
-        <div class="col-md-12">
+        <div class="col-md-3">
         	<p>所选日期不可用房/总数：<span></span>&nbsp;&nbsp;/&nbsp;&nbsp;<span></span></p>
         </div>
     </div>

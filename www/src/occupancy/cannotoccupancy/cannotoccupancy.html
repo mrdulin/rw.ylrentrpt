@@ -2,7 +2,7 @@
 	<div class="row">
 		<div class="col-md-12">
 			<table class="table table-bordered table-hover">
-				<caption><span ng-bind="::vm.date"></span>不可用房数据表格</caption>
+				<caption><span ng-bind="::vm.date"></span>不可用房数据统计</caption>
 				<thead>
 					<tr>
 						<th>小区</th>
@@ -30,6 +30,12 @@
 					</tr>
 				</tbody>
 			</table>
+		</div>
+	</div>
+
+	<div class="row" ng-if="vm.rooms.length === 0">
+		<div class="col-md-12">
+			<p class="tc">暂无数据</p>
 		</div>
 	</div>
 

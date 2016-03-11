@@ -4,6 +4,7 @@ angular.module('ylrent.rpt', [
 	'ngAnimate',
 	'ui.bootstrap',
 	'ngTouch',
+	'daterangepicker',
 	'ylrent.rpt.controllers',
 	'ylrent.rpt.services'
 ]);
@@ -38,12 +39,12 @@ function MainController($log) {
 					},
 					{
 						key: 'tomorrowoccupancy',
-						name: '明日入住',
+						name: '入住统计',
 						baseKey: 'occupancy'
 					},
 					{
 						key: 'tomorrowcheckout',
-						name: '明日退房',
+						name: '退房统计',
 						baseKey: 'occupancy'
 					}
 				]
