@@ -65,7 +65,8 @@ router.get('/dailyrents/start/:startdate/end/:enddate',(req,res)=>{
 			return;
 		}
 		contractnoList = result;
-		pool.query("select roomNo,RoomName,hotelNo,hotelName,checkintime,checkouttime,customer,orderNo,rentalType,rentalPerDay,telno,channelName,rentMoney,statusName,orderTypeName,handwork_desc from to_check_out_list limit 10",[req.params.enddate,req.params.startdate],(err1,result1)=>{
+		pool.query("select o.roomNo,r.RoomName as roomName,h.hotelNo,h.hotelName as hotelName,o.checkintime,o.checkouttime,o.customer,o.orderNo,o.rentalType,o.telno,o.channelName,o.rentMoney,o.statusName,o.orderTypeName,o.handwork_desc from orders o join room r on o.roomNo = r.roomNo join hotel h on r.hotelNo = h.hotelNo  where customer not Regexp('维修|装修|准备|无房|投诉|家具|打扫|交房|开荒|看房') and cast(checkintime as date) >=? and cast(checkintime as date)<=? order by o.checkintime",[req.params.startdate,req.params.enddate],(err1,result1)=>{
+
 			if(err1)
 			{
 				console.error(err);
@@ -74,15 +75,21 @@ router.get('/dailyrents/start/:startdate/end/:enddate',(req,res)=>{
 			else
 			{
 				result1.map((row)=>{
-					console.log('finding  ',row.hotelName+row.roomName);
-					var a = contractnoList.find((item)=>{
+					var found = contractnoList.find((item)=>{
 						return item.title.replace(' ','') == row.hotelName+row.roomName;
 					});
-					row["contractno"] = a.contractno;
+					if(found)
+					{
+						row["contractno"] = found.contractno;
+					}
+					else
+					{
+						console.log('not found contractno for',row.hotelName+row.roomName);
+					}
 				})
 				
 			}
-			res.send(result1);
+			res.send(result1).end();
 		})
 
 	});
