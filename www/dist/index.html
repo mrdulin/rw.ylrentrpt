@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="ylrent.rpt">
+
+<head>
+    <title>YLRent Report</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="format-detection" content="email=no" />
+
+    <link rel="stylesheet" href="styles/all.min.css">
+
+</head>
+
+<body ng-controller="MainController as vm">
+
+	<div id="header">
+		<nav class="navbar navbar-default">
+		  <div class="container-fluid">
+		    <div class="navbar-header">
+		      <a class="navbar-brand" href="#">
+		        <img alt="YLRent"/>
+		      </a>
+		    </div>
+              <p class="pull-right">数据更新于: <span ng-bind="::vm.lastupdatetime.atWhen | dateFormat"></span></p>
+		  </div>
+		</nav>
+	</div>
+    
+	<div class="container-fluid">
+
+		<div class="row">
+			<div class="col-md-2">
+				<div ng-repeat="(key, obj) in vm.sidebar">
+					<h5 ng-bind="::obj.name"></h5>
+					<div class="list-group">
+						<a class="list-group-item" ui-sref-active="active" ng-repeat="menu in obj.subMenus" ui-sref="{{menu.baseKey}}.{{menu.key}}" ui-sref-opts="{reload: true}" ng-bind="::menu.name"></a>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-10" ui-view></div>
+		</div>
+    </div>
+
+    <script src="scripts/all.min.js"></script>
+
+</body>
+
+</html>

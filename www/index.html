@@ -8,11 +8,13 @@
     <meta name="format-detection" content="telephone=no" />
     <meta name="format-detection" content="email=no" />
 
+    <!-- build:css -->
     <link rel="stylesheet" type="text/css" href="./node_modules/bootstrap/dist/css/bootstrap-theme.css">
     <link rel="stylesheet" type="text/css" href="./node_modules/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="./node_modules/bootstrap-daterangepicker/daterangepicker.css">
     <link rel="stylesheet" type="text/css" href="./node_modules/angular-loading-bar/build/loading-bar.css">
     <link rel="stylesheet" type="text/css" href="./src/site.css">
+    <!-- endbuild -->
 </head>
 
 <body ng-controller="MainController as vm">
@@ -45,7 +47,7 @@
 		</div>
     </div>
 
-    <!-- libs -->
+    <!-- build:js -->
     <script src="./node_modules/angular/angular.js"></script>
     <script src="./node_modules/angular-touch/angular-touch.js"></script>
     <script src="./node_modules/angular-ui-router/release/angular-ui-router.js"></script>
@@ -60,8 +62,6 @@
     <script src="./node_modules/angular-daterangepicker/js/angular-daterangepicker.js"></script>
     <script src="./node_modules/angular-loading-bar/build/loading-bar.js"></script>
 
-
-    <!-- app -->
     <script src="./src/app.js"></script>
     <script src="./src/router.js"></script>
     <script src="./src/service.js"></script>
@@ -76,6 +76,7 @@
     <script src="./src/occupancy/tomorrowoccupancy/tomorrowoccupancy.service.js"></script>
     <script src="./src/order/daily/daily.controller.js"></script>
     <script src="./src/order/daily/daily.service.js"></script>
+    <!-- endbuild -->
 </body>
 
 </html>
