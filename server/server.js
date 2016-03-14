@@ -15,6 +15,7 @@ app.use('/api/hotel',route.Hotel);
 app.use('/api/room',route.Room);
 app.use('/api/order',route.Order);
 app.use('/api/status',route.Status);
+app.use('/api/update',route.Update);
 
 app.listen('3000');
 console.log('listen on 3000');
