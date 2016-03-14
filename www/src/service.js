@@ -73,15 +73,16 @@ function DailyRent($resource) {
 	return $resource(url, paramDefaults, actions);
 }
 
-CommonService.$inject = ['$log'];
+CommonService.$inject = ['$log', '$resource'];
 
-function CommonService($log) {
+function CommonService($log, $resource) {
 
 	var service = {};
 
 	angular.extend(service, {
 		getPage: getPage,
-		formatDate: formatDate
+		formatDate: formatDate,
+		getLastUpDatetime: getLastUpDatetime
 	});
 
 	function getPage(currentPage, pageSize, totalItems) {
@@ -89,6 +90,14 @@ function CommonService($log) {
 		var index = currentPage - 1;	
 
 		return totalItems.slice(index, index + pageSize - 1);
+	}
+
+	function getLastUpDatetime() {
+		var url = '/api/update/lastupdatetime';
+
+		var resource = $resource(url);
+
+		return resource.get();
 	}
 
 	/**

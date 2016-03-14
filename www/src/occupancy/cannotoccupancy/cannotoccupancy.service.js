@@ -7,11 +7,15 @@ CannotOccupancyService.$inject = ['Room', '$log'];
 function CannotOccupancyService(Room, $log) {
 
 	var service = {};
+	var statusList = ['deliver', 'notDelivered', 'notDecorated', 'decorating', 'clean', 'pendingFurniture', 'repair', 'longRent', 'total'];
 
 	angular.extend(service, {
 		queryCannotOccupancyRoom: queryCannotOccupancyRoom,
-		reconstructData: reconstructData
+		reconstructData: reconstructData,
+		getTotalData: getTotalData
 	});
+
+	return service;
 
 	function reconstructData(rawRoomDatas) {
 		var newData = {},
@@ -30,6 +34,9 @@ function CannotOccupancyService(Room, $log) {
 						return 'deliver';
 						break;
 					case '开荒打扫':
+						return 'clean';
+						break;
+					case '打扫':
 						return 'clean';
 						break;
 					case '待送家具':
@@ -54,16 +61,42 @@ function CannotOccupancyService(Room, $log) {
 						break;
 				}
 			});
-		})	
 
-		// $log.info(data);
-		$log.info(newData);
+		});
+
+		_.each(newData, function(value, key) {
+			var countList = _.values(value);
+			newData[key].total = 0;
+			_.each(countList, function(el, index) {
+				newData[key].total += el;
+			});
+		});
+
 		return newData;
+	}
+
+	function getTotalData(data) {
+		$log.info(data);
+		var totalData = [];
+
+		_.each(statusList, function(status, index) {
+			totalData[index] = {name: status};
+			totalData[index]['count'] = _.chain(data)
+				.values()
+				.pluck(status)
+				.compact()
+				.reduce(function(memo, num) { 
+					return memo + num; 
+				}, 0)
+				.value();
+		});
+
+		$log.info(totalData);
+		return totalData;
 	}
 
 	function queryCannotOccupancyRoom(date) {
 		return Room.query(date);
 	}
 
-	return service;
 }

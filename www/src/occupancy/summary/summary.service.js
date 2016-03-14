@@ -2,9 +2,9 @@ angular
 	.module('ylrent.rpt.services')
 	.factory('SummaryService', SummaryService);
 
-SummaryService.$inject = ['$log', '$resource', 'Status', 'Hotel'];
+SummaryService.$inject = ['$log', '$resource', 'Status', 'Hotel', '$filter'];
 
-function SummaryService($log, $resource, Status, Hotel) {
+function SummaryService($log, $resource, Status, Hotel, $filter) {
 
 	var service = {};
 
@@ -19,7 +19,7 @@ function SummaryService($log, $resource, Status, Hotel) {
 
 	function setOccupancyRate(summarys) {
 		angular.forEach(summarys, function(summary){
-			summary.occupanyRate = (summary.occupyRoomCount / summary.TotalRoomCount).toFixed(2);
+			summary.occupanyRate = $filter('number')(summary.occupyRoomCount / summary.TotalRoomCount, 2)
 		});
 		return summarys;
 	}

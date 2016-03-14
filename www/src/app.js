@@ -7,23 +7,28 @@ angular.module('ylrent.rpt', [
 	'ngTouch',
 	'daterangepicker',
 	'ylrent.rpt.controllers',
-	'ylrent.rpt.services'
+	'ylrent.rpt.services',
+	'ylrent.rpt.directives',
+	'ylrent.rpt.filters'
 ]);
 
 angular.module('ylrent.rpt.controllers', []);
 angular.module('ylrent.rpt.services', []);
+angular.module('ylrent.rpt.directives', []);
+angular.module('ylrent.rpt.filters', []);
 
 angular
 	.module('ylrent.rpt.controllers')
 	.controller('MainController', MainController);
 
-MainController.$inject = ['$log'];
+MainController.$inject = ['$log', 'CommonService'];
 
-function MainController($log) {
+function MainController($log, CommonService) {
 
 	var vm = this;
 
 	angular.extend(vm, {
+		lastupdatetime: '',
 		sidebar: {
 			occupancy: {
 				name: '入住情况',
@@ -61,6 +66,11 @@ function MainController($log) {
 				]
 			}
 		}
-	})
+	});
 
+	var lastupdatetimePromise = CommonService.getLastUpDatetime().$promise.then(function(data) {
+		vm.lastupdatetime = data;
+	}, function(err) {
+		alert(err.msg);
+	});
 }

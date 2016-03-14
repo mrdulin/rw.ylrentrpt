@@ -28,3 +28,11 @@ a.disabled{
 	color: #ddd;
 }
 
+tfoot td{
+	font-weight: bold;
+}
+
+.row{
+	margin-bottom: 15px;
+}
+

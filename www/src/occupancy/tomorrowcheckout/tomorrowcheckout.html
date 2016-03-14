@@ -1,6 +1,6 @@
 <div id="checkout" class="container-fluid">
 	<div class="row">
-		<div class="col-md-3 date-picker-control">
+		<div class="col-md-4 col-sm-7 col-xs-12 date-picker-control">
 			<label for="dateRangePicker">日期选择</label>
 			<input date-range-picker
 				id="dateRangePicker" 
@@ -10,7 +10,7 @@
 				ng-model="vm.datePicker.date"/>
 			<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
 		</div>
-		<div class="col-md-2">
+		<div class="col-md-2 col-sm-5 col-xs-12">
 			<label for="rentType">租赁类型</label>
 			<select id="rentType" class="form-control wp100"
 				ng-model="vm.rentType" 
@@ -19,9 +19,8 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-12 col-sm-12 col-xs-12">
 			<table class="table table-bordered table-hover">
-				<caption>退房数据统计</caption>
 				<thead>
 					<tr>
 						<th class="cursor-pointer" ng-click="vm.order('hotelName');">
@@ -63,7 +62,7 @@
 	</div>
 
 	<div class="row" ng-if="vm.datas.length === 0">
-		<div class="col-md-12">
+		<div class="col-md-12 col-sm-12 col-xs-12">
 			<p class="tc">暂无数据</p>
 		</div>
 	</div>	

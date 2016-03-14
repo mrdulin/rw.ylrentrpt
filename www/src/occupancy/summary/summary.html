@@ -1,22 +1,21 @@
 <div id="summary" class="container-fuild">
     <div class="row">
-    	<div class="col-md-3">
+    	<div class="col-md-3 col-sm-3 col-xm-3">
     		<label for="selectHotel">选择小区</label>
     		<input id="selectHotel" type="text" 
     			ng-model="vm.selectedHotel" 
     			placeholder="输入小区名称" 
     			uib-typeahead="hotel as hotel.hotelName for hotel in vm.hotels | filter: {hotelName: $viewValue}" 
-    			typeahead-on-select="vm.hotelSelect()"
     			typeahead-loading="loadingHotel"
     		    typeahead-no-results="noResults" 
     		    class="form-control">
 
-		    <i ng-show="loadingHotel" class="glyphicon glyphicon-refresh"></i>
+		    <!-- <i ng-show="loadingHotel" class="glyphicon glyphicon-refresh"></i>
 		    <div ng-show="noResults">
 		      <i class="glyphicon glyphicon-remove"></i> 暂无数据
-		    </div>
+		    </div> -->
     	</div>
-        <div class="col-md-3">
+        <div class="col-md-3 col-sm-3 col-xm-3">
         	<label for="datePicker">日期选择</label>
             <div class="input-group">
         		<input id="datePicker" type="text" 
@@ -37,66 +36,48 @@
 	          	</span>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3 col-sm-3 col-xm-3">
         	<p>所选日期在住数/总数：<span ng-bind="vm.occupany.occupany"></span>&nbsp;&nbsp;/&nbsp;&nbsp;<span ng-bind="vm.occupany.total"></span></p>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3 col-sm-3 col-xm-3">
         	<p>所选日期不可用房/总数：<span></span>&nbsp;&nbsp;/&nbsp;&nbsp;<span></span></p>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12">
-            <table class="table table-bordered table-hover">
-                <caption>汇总数据表格</caption>
-                <thead>
-                    <tr>
-                        <!-- <th>日期</th> -->
-                        <th>小区</th>
-                        <th class="cursor-pointer" ng-click="vm.order('occupanyRate');">
-                        	入住率
-                        	<span ng-if="vm.predicate" ng-class="{'glyphicon-triangle-bottom': vm.reverse, 'glyphicon-triangle-top': !vm.reverse}" class="glyphicon"></span>
-                    	</th>
-                    	<th>入住数</th>
-                        <th>不可用房</th>
-                        <th>总数</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="summary in vm.pageSummarys | orderBy:vm.predicate:vm.reverse">
-                        <!-- <td ng-bind="::summary.statusDate.substr(0, 10)"></td> -->
-                        <td ng-bind="summary.hotelName"></td>
-                        <td ng-if="summary.TotalRoomCount === 0">-</td>
-                        <td ng-if="summary.TotalRoomCount !== 0" ng-bind="summary.occupanyRate * 100 + '%'"></td>
-                        <td ng-bind="summary.occupyRoomCount"></td>
-                        <td ng-bind="summary.oooRoomCount"></td>
-                        <td ng-bind="summary.TotalRoomCount"></td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="col-md-12 col-sm-12 col-xm-12">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th ng-class="{'cursor-pointer': theader.predicate}" 
+                                ng-click="vm.order(theader.predicate)"
+                                ng-repeat="theader in vm.tableHeaders">
+                                <span ng-bind="::theader.txt"></span>
+
+                                <span ng-if="(vm.predicate === theader.predicate) && theader.predicate" ng-class="{'glyphicon-triangle-bottom': vm.reverse, 'glyphicon-triangle-top': !vm.reverse}" class="glyphicon"></span>                            
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="summary in vm.summarys | orderBy:vm.predicate:vm.reverse | filter: {hotelName: vm.selectedHotel.hotelName}">
+                            <!-- <td ng-bind="::summary.statusDate.substr(0, 10)"></td> -->
+                            <td ng-bind="summary.hotelName"></td>
+                            <td ng-if="summary.TotalRoomCount === 0">-</td>
+                            <td ng-if="summary.TotalRoomCount !== 0" ng-bind="summary.occupanyRate * 100 + '%'"></td>
+                            <td ng-bind="summary.occupyRoomCount"></td>
+                            <td ng-bind="summary.oooRoomCount"></td>
+                            <td ng-bind="summary.TotalRoomCount"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
         </div>
     </div>
 
-    <div class="row" ng-if="vm.pageSummarys.length === 0">
-    	<div class="col-md-12">
+    <div class="row" ng-if="vm.summarys.length === 0">
+    	<div class="col-md-12 col-sm-12 col-xm-12">
     		<p class="tc">暂无数据</p>
     	</div>
     </div>
-    <div class="row">
-    	<div class="col-md-12 clearfix">
-    		 <uib-pagination 
-    		 	num-pages="numPages"
-             	items-per-page="vm.pagination.pageSize"
-             	boundary-links="true"
-             	class="pull-right"
-             	previous-text="&lsaquo;" 
-             	next-text="&rsaquo;" 
-             	first-text="&laquo;" 
-             	last-text="&raquo;"
-             	max-size="vm.pagination.maxSize"
-             	total-items="vm.pagination.totalItems" 
-             	ng-model="vm.pagination.currentPage" 
-             	ng-change="vm.pageChanged()">
-             	</uib-pagination>
-    	</div>
-    </div>	
 </div>
