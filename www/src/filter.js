@@ -4,6 +4,6 @@ angular
 
 function dateFormat() {
 	return function(date) {
-		return moment(date).format('YYYY-M-D HH:mm');
+		return moment(date).utc().format('YYYY-M-D HH:mm');
 	}
 }

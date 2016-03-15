@@ -106,7 +106,7 @@ function CommonService($log, $resource) {
 	 * @return {[type]}      "2016-3-11"
 	 */
 	function formatDate(date) {
-		return moment(date).format('YYYY-M-D');
+		return moment(date).utc().format('YYYY-M-D');
 	}
 
 	return service;

@@ -1,17 +1,17 @@
 var gulp = require('gulp');
-var webserver = require('gulp-webserver');
-var concat = require('gulp-concat');
-var templateCache = require('gulp-angular-templatecache');
-var ngAnnotate = require('gulp-ng-annotate');
-// var useref = require('gulp-useref');
-var clean = require('gulp-clean');
-var gulpif = require('gulp-if');
-var uglify = require('gulp-uglify');
-var htmlreplace = require('gulp-html-replace');
-var cssmin = require('gulp-cssmin');
-var rename = require('gulp-rename');
-var concatCss = require('gulp-concat-css');
+var loadPluginsConfig = {
+	DEBUG: true,
+	pattern: ['gulp-*', 'gulp.*'],
+	config: 'package.json',
+	scope: ['dependencies'],
+	replaceString: /^gulp(-|\.)/,
+	camelize: true,
+	lazy: true
+};
+var $ = require('gulp-load-plugins')();
+
 var runSequence = require('run-sequence');
+var rename = require('gulp-rename');
  
 var path = {
 	scripts: [
@@ -40,11 +40,11 @@ var path = {
 		"./node_modules/angular-loading-bar/build/loading-bar.css",
 		"./src/**/*.css"
 	]	
-}
+};
  
 gulp.task('clean', function () {
 	return gulp.src('dist', {read: false})
-		.pipe(clean());
+		.pipe($.clean());
 });
 
 gulp.task('copyFont', function() {
@@ -54,34 +54,37 @@ gulp.task('copyFont', function() {
  
 gulp.task('templateCache', function () {
   return gulp.src('src/**/*.html')
-    .pipe(templateCache({
+    .pipe($.angularTemplatecache({
     	root: './src/',
     	standalone: false,
     	module: 'ylrent.rpt.templateCache',
     	moduleSystem: 'IIFE'
     }))
-    .pipe(gulp.dest('src'));
+    .pipe($.size())
+    .pipe(gulp.dest('src'))
 });
 
 gulp.task('scripts', function () {
     return gulp.src(path.scripts)
-        .pipe(ngAnnotate())
-        .pipe(concat('all.min.js'))
-        .pipe(uglify())
-        .pipe(gulp.dest('./dist/scripts'));
+        .pipe($.ngAnnotate())
+        .pipe($.concat('all.min.js'))
+        .pipe($.uglify())
+        .pipe($.size())
+        .pipe(gulp.dest('./dist/scripts'))
 });
 
 gulp.task('styles', function() {
 	return gulp.src(path.styles)
-		.pipe(concatCss("all.css"))
-		.pipe(cssmin())
+		.pipe($.concatCss("all.css"))
+		.pipe($.cssmin())
 		.pipe(rename({suffix: '.min'}))
+		.pipe($.size())
 		.pipe(gulp.dest('./dist/styles'))
 });
 
 gulp.task('replaceHtml', function() {
   gulp.src('index.html')
-    .pipe(htmlreplace({
+    .pipe($.htmlReplace({
     	'css': 'styles/all.min.css',
         'js': 'scripts/all.min.js'
     }))
@@ -89,12 +92,15 @@ gulp.task('replaceHtml', function() {
 });
 
 gulp.task('default', function() {
-	runSequence('clean', 'templateCache', ['scripts', 'styles'], 'replaceHtml', 'copyFont');
+	// gulp.watch(path.scripts.concat(path.styles), function() {
+		runSequence('clean', 'templateCache', 'scripts', 'styles', 'replaceHtml', 'copyFont');
+	// });
 });
 
 // gulp.task('webserver', function() {
 // 	gulp.src('./')
-// 		.pipe(webserver({
+// 		.pipe($.webserver({
+// 			port: 3000,
 // 			livereload: true,
 // 			directoryListing: false,
 // 			open: true,
