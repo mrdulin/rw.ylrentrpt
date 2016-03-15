@@ -9,13 +9,15 @@ angular.module('ylrent.rpt', [
 	'ylrent.rpt.controllers',
 	'ylrent.rpt.services',
 	'ylrent.rpt.directives',
-	'ylrent.rpt.filters'
+	'ylrent.rpt.filters',
+	'ylrent.rpt.templateCache'
 ]);
 
 angular.module('ylrent.rpt.controllers', []);
 angular.module('ylrent.rpt.services', []);
 angular.module('ylrent.rpt.directives', []);
 angular.module('ylrent.rpt.filters', []);
+angular.module('ylrent.rpt.templateCache', [])
 
 angular
 	.module('ylrent.rpt.controllers')

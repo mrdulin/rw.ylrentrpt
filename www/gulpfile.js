@@ -29,6 +29,7 @@ var path = {
 		"./node_modules/angular-daterangepicker/js/angular-daterangepicker.js",
 		"./node_modules/angular-loading-bar/build/loading-bar.js",
 		"./src/app.js",
+		"./src/templates.js",
 		"./src/router.js",
 		"./src/**/*.js"
 	],
@@ -54,13 +55,15 @@ gulp.task('copyFont', function() {
 gulp.task('templateCache', function () {
   return gulp.src('src/**/*.html')
     .pipe(templateCache({
-    	standalone: true,
+    	root: './src/',
+    	standalone: false,
+    	module: 'ylrent.rpt.templateCache',
     	moduleSystem: 'IIFE'
     }))
     .pipe(gulp.dest('src'));
 });
 
-gulp.task('scripts', ['clean', 'templateCache'], function () {
+gulp.task('scripts', function () {
     return gulp.src(path.scripts)
         .pipe(ngAnnotate())
         .pipe(concat('all.min.js'))
@@ -76,17 +79,17 @@ gulp.task('styles', function() {
 		.pipe(gulp.dest('./dist/styles'))
 });
 
-gulp.task('build', ['scripts', 'styles'], function() {
+gulp.task('replaceHtml', function() {
   gulp.src('index.html')
     .pipe(htmlreplace({
     	'css': 'styles/all.min.css',
         'js': 'scripts/all.min.js'
     }))
     .pipe(gulp.dest('./dist/'));
-});d
+});
 
 gulp.task('default', function() {
-	runSequence(['scripts', 'styles'], 'build', 'copyFont');
+	runSequence('clean', 'templateCache', ['scripts', 'styles'], 'replaceHtml', 'copyFont');
 });
 
 // gulp.task('webserver', function() {
