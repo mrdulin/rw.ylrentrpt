@@ -11,6 +11,7 @@ var htmlreplace = require('gulp-html-replace');
 var cssmin = require('gulp-cssmin');
 var rename = require('gulp-rename');
 var concatCss = require('gulp-concat-css');
+var runSequence = require('run-sequence');
  
 var path = {
 	scripts: [
@@ -43,7 +44,12 @@ var path = {
 gulp.task('clean', function () {
 	return gulp.src('dist', {read: false})
 		.pipe(clean());
-})
+});
+
+gulp.task('copyFont', function() {
+	return gulp.src('./node_modules/bootstrap/dist/fonts/**/*')
+		.pipe(gulp.dest('./dist/fonts/'));
+});
  
 gulp.task('templateCache', function () {
   return gulp.src('src/**/*.html')
@@ -70,15 +76,18 @@ gulp.task('styles', function() {
 		.pipe(gulp.dest('./dist/styles'))
 });
 
-gulp.task('default', ['scripts', 'styles'], function() {
+gulp.task('build', ['scripts', 'styles'], function() {
   gulp.src('index.html')
     .pipe(htmlreplace({
     	'css': 'styles/all.min.css',
         'js': 'scripts/all.min.js'
     }))
     .pipe(gulp.dest('./dist/'));
-});
+});d
 
+gulp.task('default', function() {
+	runSequence(['scripts', 'styles'], 'build', 'copyFont');
+});
 
 // gulp.task('webserver', function() {
 // 	gulp.src('./')
