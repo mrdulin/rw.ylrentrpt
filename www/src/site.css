@@ -12,6 +12,8 @@
 
 body{
 	font-family: 'Microsoft Yahei';
+	min-width: 320px;
+	overflow: auto;
 }
 
 .wp100{width: 100%;}
@@ -37,3 +39,7 @@ tfoot td{
 }
 
 thead{background-color: #fff;}
+
+.uib-datepicker-popup{
+	z-index: 9999;
+}
