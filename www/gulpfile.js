@@ -28,9 +28,6 @@ var path = {
 		"./node_modules/bootstrap-daterangepicker/daterangepicker.js",
 		"./node_modules/angular-daterangepicker/js/angular-daterangepicker.js",
 		"./node_modules/angular-loading-bar/build/loading-bar.js",
-		"./src/app.js",
-		"./src/templates.js",
-		"./src/router.js",
 		"./src/**/*.js"
 	],
 	styles: [
@@ -41,7 +38,7 @@ var path = {
 		"./src/**/*.css"
 	]	
 };
- 
+
 gulp.task('clean', function () {
 	return gulp.src('dist', {read: false})
 		.pipe($.clean());
@@ -53,23 +50,27 @@ gulp.task('copyFont', function() {
 });
  
 gulp.task('templateCache', function () {
-  return gulp.src('src/**/*.html')
-    .pipe($.angularTemplatecache({
-    	root: './src/',
-    	standalone: false,
-    	module: 'ylrent.rpt.templateCache',
-    	moduleSystem: 'IIFE'
-    }))
-    .pipe($.size())
-    .pipe(gulp.dest('src'))
+	return gulp.src('src/**/*.html')
+	    .pipe($.angularTemplatecache({
+	    	root: './src/',
+	    	standalone: false,
+	    	module: 'ylrent.rpt.templateCache',
+	    	moduleSystem: 'IIFE'
+	    }))
+	    .pipe($.size())
+	    .pipe(gulp.dest('src'))
 });
 
 gulp.task('scripts', function () {
     return gulp.src(path.scripts)
+    	.pipe($.angularFilesort())
+    	.pipe($.angularFilesort())
         .pipe($.ngAnnotate())
         .pipe($.concat('all.min.js'))
         .pipe($.uglify())
         .pipe($.size())
+        .pipe($.md5(10))
+        .pipe($.filenames('javascript'))
         .pipe(gulp.dest('./dist/scripts'))
 });
 
@@ -79,22 +80,35 @@ gulp.task('styles', function() {
 		.pipe($.cssmin())
 		.pipe(rename({suffix: '.min'}))
 		.pipe($.size())
+		.pipe($.md5(10))
+		.pipe($.filenames('css'))
 		.pipe(gulp.dest('./dist/styles'))
 });
 
 gulp.task('replaceHtml', function() {
-  gulp.src('index.html')
-    .pipe($.htmlReplace({
-    	'css': 'styles/all.min.css',
-        'js': 'scripts/all.min.js'
-    }))
-    .pipe(gulp.dest('./dist/'));
+	var cssPath = 'styles/',
+		jsPath = 'scripts/';
+
+	var cssFilenames = $.filenames.get('css');
+	var jsFilenames = $.filenames.get('javascript');
+
+ 	gulp.src('index.html')
+	    .pipe($.htmlReplace({
+	    	'css': generatePath(cssPath, cssFilenames),
+	        'js': generatePath(jsPath, jsFilenames)
+	    }))
+	    .pipe(gulp.dest('./dist/'));
+
+
+    function generatePath(basePath, filenames) {
+    	return filenames.map(function(filename) {
+    		return basePath + filename;
+    	});
+    }
 });
 
 gulp.task('default', function() {
-	// gulp.watch(path.scripts.concat(path.styles), function() {
-		runSequence('clean', 'templateCache', 'scripts', 'styles', 'replaceHtml', 'copyFont');
-	// });
+	runSequence('clean', 'templateCache', 'scripts', 'styles', 'replaceHtml', 'copyFont');
 });
 
 // gulp.task('webserver', function() {
