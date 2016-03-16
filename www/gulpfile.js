@@ -28,6 +28,7 @@ var path = {
 		"./node_modules/bootstrap-daterangepicker/daterangepicker.js",
 		"./node_modules/angular-daterangepicker/js/angular-daterangepicker.js",
 		"./node_modules/angular-loading-bar/build/loading-bar.js",
+		"./node_modules/floatthead/dist/jquery.floatThead.js",
 		"./src/**/*.js"
 	],
 	styles: [

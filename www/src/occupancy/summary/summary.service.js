@@ -17,7 +17,7 @@ function SummaryService($log, $resource, Status, Hotel, $filter) {
 
 	function setOccupancyRate(summarys) {
 		angular.forEach(summarys, function(summary){
-			summary.occupanyRate = $filter('number')(summary.occupyRoomCount / summary.TotalRoomCount, 2)
+			summary.occupanyRate = $filter('number')(summary.occupyRoomCount / (summary.TotalRoomCount - summary.oooRoomCount), 2)
 		});
 		return summarys;
 	}
@@ -28,7 +28,8 @@ function SummaryService($log, $resource, Status, Hotel, $filter) {
 			summary = null,
 			total = 0,
 			occupany = 0,
-			oooRoomCount = 0;
+			oooRoomCount = 0,
+			occupanyRate = 0;
 		for(; i < len; i++){
 			summary = summarys[i];
 			occupany += summary.occupyRoomCount;
@@ -36,10 +37,12 @@ function SummaryService($log, $resource, Status, Hotel, $filter) {
 			oooRoomCount += summary.oooRoomCount;
 		}
 
+		occupanyRate = $filter('number')(summary.occupyRoomCount / (summary.TotalRoomCount - summary.oooRoomCount), 2)
 		return {
 			total: total,
 			occupany: occupany,
-			oooRoomCount: oooRoomCount
+			oooRoomCount: oooRoomCount,
+			occupanyRate: occupanyRate
 		};
 	}
 

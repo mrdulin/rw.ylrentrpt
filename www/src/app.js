@@ -17,7 +17,7 @@ angular.module('ylrent.rpt.controllers', []);
 angular.module('ylrent.rpt.services', []);
 angular.module('ylrent.rpt.directives', []);
 angular.module('ylrent.rpt.filters', []);
-angular.module('ylrent.rpt.templateCache', [])
+angular.module('ylrent.rpt.templateCache', []);
 
 angular
 	.module('ylrent.rpt.controllers')
