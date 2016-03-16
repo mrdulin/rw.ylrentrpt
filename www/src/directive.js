@@ -12,15 +12,16 @@ function stickUp($timeout, $log) {
 
 	function link(scope, element, attr) {
 
-		$(window).on('scroll', function(e) {
-			$log.log(element[0].getBoundingClientRect().top);
-		});
-
 		$timeout(function() {
 			$(element).floatThead({
 				position: "auto",
 			});	
+			$(element).closest('.table-responsive').on('scroll', function() {
+				$(element).floatThead('reflow');
+			})
 		});
+
+		
 
 	}
 }
