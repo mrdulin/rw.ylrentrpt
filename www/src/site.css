@@ -53,3 +53,7 @@ thead{background-color: #fff;}
 		max-width: 100% !important;
 	}
 }
+
+.daterangepicker {
+	min-width: 300px !important;
+}
