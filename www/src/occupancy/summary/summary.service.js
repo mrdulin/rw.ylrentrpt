@@ -37,13 +37,16 @@ function SummaryService($log, $resource, Status, Hotel, $filter) {
 			oooRoomCount += summary.oooRoomCount;
 		}
 
-		occupanyRate = $filter('number')(summary.occupyRoomCount / (summary.TotalRoomCount - summary.oooRoomCount), 2)
-		return {
+		var data = {
 			total: total,
 			occupany: occupany,
-			oooRoomCount: oooRoomCount,
-			occupanyRate: occupanyRate
+			oooRoomCount: oooRoomCount
 		};
+
+		occupanyRate = $filter('number')(data.occupany / (data.total - data.oooRoomCount), 2);
+		data.occupanyRate = occupanyRate;
+
+		return data;
 	}
 
 	function getHotels() {

@@ -1,8 +1,6 @@
 var gulp = require('gulp');
 var $ = require('gulp-load-plugins')();
-
 var runSequence = require('run-sequence');
-var rename = require('gulp-rename');
 
 var path = {
     scripts: [
@@ -68,9 +66,8 @@ gulp.task('scripts', function () {
 
 gulp.task('styles', function () {
     return gulp.src(path.styles)
-        .pipe($.concatCss("all.css"))
+        .pipe($.concatCss("all.min.css"))
         .pipe($.cssmin())
-        .pipe(rename({suffix: '.min'}))
         .pipe($.size())
         .pipe($.md5(10))
         .pipe($.filenames('css'))
