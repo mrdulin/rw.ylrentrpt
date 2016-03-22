@@ -99,14 +99,36 @@ router.get('/dailyrents/start/:startdate/end/:enddate',(req,res)=>{
 
 
 router.get('/ali/list',(req,res)=>{
-	var contractnoList = [];
-	alirdspool.query('SELECT title,contractno  FROM tbl_house',(err,result)=>{
+
+	alirdspool.query('SELECT title,cast(`contractno` as signed) as contract FROM tbl_house ORDER BY contract ',(err,result)=>{
+		var data = [];
 		if(err)
 		{
 			console.log(err);
 			return;
 		}
-		contractnoList = result;
+		data.push("开始查找缺少的房源编号");
+		for (var i = 0; i < result.length-1; i++) {
+				if(!result[i].contract) 
+				{
+					data.push(result[i].title+"无编号");
+				}
+				else
+				{
+					if(result[i+1].contract - result[i].contract > 1)
+					{
+						
+						for(var j=result[i].contract+1;j<result[i+1].contract;j++)
+						{
+							data.push(j);
+						}
+					}
+					if(result[i+1].contract == result[i].contract )
+						data.push("发现重复房源编号"+result[i].contract+result[i].title+result[i+1].title);
+				}
+
+		}
+		res.json(data).end();
 	})
 })
 
