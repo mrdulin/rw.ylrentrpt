@@ -9,6 +9,4 @@ function OooReasonController($log, oooRoomDetails) {
 		oooRoomDetails:  oooRoomDetails
 	});
 
-	$
-
 }
