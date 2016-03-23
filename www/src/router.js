@@ -55,6 +55,14 @@ function config($stateProvider, $urlRouterProvider, $resourceProvider, cfpLoadin
 				data: '不可入住'
 			}
 		})
+		.state('occupancy.oooReason', {
+			url: '/oooReason',
+			templateUrl: './src/occupancy/oooReason/oooReason.html',
+			controller: 'OooReasonController as vm',
+			custom: {
+				data: '不可入住明细'
+			}
+		})
 		.state('occupancy.tomorrowoccupancy', {
 			url: '/tomorrowoccupancy',
 			templateUrl: './src/occupancy/tomorrowoccupancy/tomorrowoccupancy.html',

@@ -46,6 +46,11 @@ function MainController($log, CommonService) {
 						baseKey: 'occupancy'
 					},
 					{
+						key: 'oooReason',
+						name: '不可用房明细',
+						baseKey: 'occupancy'
+					},
+					{
 						key: 'tomorrowoccupancy',
 						name: '入住统计',
 						baseKey: 'occupancy'
