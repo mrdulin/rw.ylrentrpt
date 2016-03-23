@@ -59,6 +59,15 @@ function config($stateProvider, $urlRouterProvider, $resourceProvider, cfpLoadin
 			url: '/oooReason',
 			templateUrl: './src/occupancy/oooReason/oooReason.html',
 			controller: 'OooReasonController as vm',
+			resolve: {
+				oooRoomDetails: function(OooReasonService) {
+					var date = moment().format('YYYY-M-DD');
+					var oooRoomDetails = OooReasonService.getOooroomDetail();
+					return oooRoomDetails.query({date: date}).$promise.then(function(data) {
+						return OooReasonService.setVmData(data);
+					});	
+				}
+			},
 			custom: {
 				data: '不可入住明细'
 			}

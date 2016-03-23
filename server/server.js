@@ -4,7 +4,7 @@ var route = require('./routes');
 var bodyParser = require('body-parser');
 
 app.use(bodyParser());
-app.use(express.static('../www/dist'));
+app.use(express.static('../www'));
 
 // app.param('hotelNo',(req,res,next,hotelNo)=>{
 // 	req.hotel = hotelNo;

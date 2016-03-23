@@ -1,1 +1,24 @@
-<p>This is oooReason page</p>
+<div id="oooReason">
+	<div class="row">
+		<div class="col-md-12">
+			<table class="table table-bordered table-hover">
+				<thead>
+					<tr>
+						<th>不可入住原因</th>
+						<th>房源信息</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="(reason, rooms) in vm.oooRoomDetails">
+						<td ng-bind="::reason"></td>
+						<td>
+							<table>
+								<tr ng-repeat="room in rooms" ng-bind="::room.roomName"></tr>
+							</table>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>	
+</div>
