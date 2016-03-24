@@ -10,4 +10,14 @@ var alirdspool  = mysql.createPool({
 
 });
 
+/*var alirdspool  = mysql.createPool({
+	connectionLimit : 5,
+	host:'ylrent.mysqldb.chinacloudapi.cn',
+	user:'ylrent%jason',
+	password:'Password01!',
+	database:'yltestdb',
+	timezone:'utc'  // this is for time convert 
+
+});*/
+
 exports = module.exports = alirdspool;
