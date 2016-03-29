@@ -44,6 +44,7 @@
 	                    	</th>
 							<th>房号</th>
 							<th>入住客人</th>
+							<th>入住状态</th>
 							<th>入住时间</th>
 							<th>离店时间</th>
 							<th>租赁类型</th>
@@ -55,6 +56,7 @@
 							<td ng-bind="::data.hotelName"></td>
 							<td ng-bind="::data.roomName"></td>
 							<td ng-bind="::data.customer"></td>	
+							<td ng-bind="::data.statusName"></td>
 							<td ng-bind="::vm.formatDate(data.checkintime)"></td>					
 							<td ng-bind="::vm.formatDate(data.checkouttime)"></td>	
 							<td ng-bind="::data.rentalType"></td>
