@@ -3,6 +3,7 @@ var router = express.Router();
 var pool = require('../service/mysqlConnect');
 var alirdspool = require('../service/alimysqlConnect');
 var error = require('../error.js')
+var moment = require('moment');
 
 
 router.get('/:orderNo',(req,res)=>{
@@ -144,7 +145,7 @@ router.get('/checkins/date/:date',(req,res)=>{
 				var startdate = moment(item.checkintime);
 				var enddate = moment(item.checkouttime);
 				var diffmonth = enddate.diff(startdate,'month');
-				if(diffmonth==0) rentalType='短租';
+				if(diffmonth==0) rentalType='日租';
 				if(diffmonth>0&&diffmonth<=6) rentalType='中短租';
 				if(diffmonth>6) rentalType='长租';
 				
@@ -182,7 +183,7 @@ router.use('/checkout/date/:date',(req,res)=>{
 				var startdate = moment(item.checkintime);
 				var enddate = moment(item.checkouttime);
 				var diffmonth = enddate.diff(startdate,'month');
-				if(diffmonth==0) rentalType='短租';
+				if(diffmonth==0) rentalType='日租';
 				if(diffmonth>0&&diffmonth<=6) rentalType='中短租';
 				if(diffmonth>6) rentalType='长租';
 				

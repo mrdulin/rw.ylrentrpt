@@ -19,21 +19,21 @@
         	<label for="datePicker">日期选择</label>
             <div class="input-group">
         		<input id="datePicker" type="text" 
-                	class="form-control" 
-                	ng-model="vm.datepicker.date" 
-                	is-open="vm.datepicker.open" 
-                	uib-datepicker-popup
-                	datepicker-options="vm.datepicker.options" 
-                	ng-change="vm.dateChange()"
-                	current-text="今天"
-                	clear-text="清除"
-                	close-text="关闭"/>
+                    class="form-control" 
+                    ng-model="vm.datepicker.date" 
+                    is-open="vm.datepicker.open" 
+                    uib-datepicker-popup
+                    datepicker-options="vm.datepicker.options" 
+                    ng-change="vm.dateChange()"
+                    current-text="今天"
+                    clear-text="清除"
+                    close-text="关闭"/>
 
                 <span class="input-group-btn">
-	            	<button type="button" class="btn btn-default" ng-click="vm.datepicker.open = true;">
-	            		<i class="glyphicon glyphicon-calendar"></i>
-	            	</button>
-	          	</span>
+                    <button type="button" class="btn btn-default" ng-click="vm.datepicker.open = true;">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                    </button>
+                </span>
             </div>
         </div>
         <div class="col-md-4 col-sm-4 col-xm-4">

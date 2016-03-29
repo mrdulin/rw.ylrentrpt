@@ -55,7 +55,7 @@ router.get('/oooroom/date/:date',(req,res)=>{
 	 })
 })
 
-router.get('/oooroomdetails/date/:date',(req,res)=>{
+router.get('/oooroomdetail/date/:date',(req,res)=>{
 	 var query = pool.query("select customer as oooReason, CONCAT_WS(' ',h.hotelName,r.roomName) as roomName from orders as o join room as r on o.roomNo = r.roomNo join hotel as h on r.hotelNo = h.hotelNo where customer Regexp '交房|打扫|家具|装修|维修|长租准备'  and  cast(checkouttime as date) >= ? and cast(checkintime as date) <= ? order by oooreason",
 	 	[req.params.date,req.params.date],(err,result)=>{
 	 		console.log(query.sql);
@@ -75,7 +75,7 @@ router.get('/oooroomdetails/date/:date',(req,res)=>{
 
 //get ooorooms from production 
 router.get('/ooorooms/date/:date',(req,res)=>{
-	pool.query("select s.status ,b.title as hotelName,h.houseno as roomName from tbl_house_status as s join tbl_house as h on s.house =h.id join tbl_building as b on h.building = b.id where s.housedate=? and s.status not in (1,3,5,6)",req.params.date,(err,result)=>{
+	alirdspool.query("select s.status ,b.title as hotelName,h.houseno as roomName from tbl_house_status as s join tbl_house as h on s.house =h.id join tbl_building as b on h.building = b.id where s.housedate=? and s.status not in (1,3,5,6)",req.params.date,(err,result)=>{
 		if(err) {console.log(err);}
 		else
 		{
@@ -123,7 +123,7 @@ router.get('/ooorooms/date/:date',(req,res)=>{
 
 //get oooroomdetails from production
 router.get('/oooroomdetails/date/:date',(req,res)=>{
-	pool.query("select s.status ,concat(b.title,' ',h.houseno) as roomName from tbl_house_status as s join tbl_house as h on s.house =h.id join tbl_building as b on h.building = b.id where s.housedate=? and s.status not in (1,3,5,6)",req.params.date,(err,result)=>{
+	alirdspool.query("select s.status ,concat(b.title,' ',h.houseno) as roomName from tbl_house_status as s join tbl_house as h on s.house =h.id join tbl_building as b on h.building = b.id where s.housedate=? and s.status not in (1,3,5,6)",req.params.date,(err,result)=>{
 		if(err) {console.log(err);}
 		else
 		{

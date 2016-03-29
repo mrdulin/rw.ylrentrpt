@@ -20,9 +20,9 @@ function OooReasonService($log, $resource) {
 			return room.oooReason;
 		});
 
-		var cleanData = tmpData['打扫'];
-		tmpData['开荒打扫'] = tmpData['开荒打扫'].concat(cleanData);
-		delete tmpData['打扫'];
+		// var cleanData = tmpData['打扫'];
+		// tmpData['开荒打扫'] = tmpData['开荒打扫'].concat(cleanData);
+		// delete tmpData['打扫'];
 		$log.info(tmpData);
 
 		return tmpData;

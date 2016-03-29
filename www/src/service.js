@@ -20,8 +20,8 @@ function Hotel($resource) {
 Status.$inject = ['$resource'];
 
 function Status($resource) {
-	var url = '/api/status/start/:startDate/end/:endDate',
-		paramDefaults = {startDate: '@sDate', endDate: '@eDate'},
+	var url = '/api/status/summary/date/:date',
+		paramDefaults = {date: '@date'},
 		actions = {
 			query: {method: 'GET', isArray: true}
 		};
@@ -32,7 +32,7 @@ function Status($resource) {
 Room.$inject = ['$resource'];
 
 function Room($resource) {
-	var url = '/api/room/oooroom/date/:date',
+	var url = '/api/room/ooorooms/date/:date',
 		paramDefaults = {date: '@date'},
 		actions = {
 			query: {method: 'GET', isArray: true}
@@ -44,8 +44,8 @@ function Room($resource) {
 CheckIn.$Inject = ['$resource'];
 
 function CheckIn($resource) {
-	var url = '/api/order/checkin/start/:startdate/end/:enddate',
-		paramDefaults = {startdate: '@sDate', enddate: '@eDate'},
+	var url = '/api/order/checkins/date/:date',
+		paramDefaults = {date: '@date'},
 		actions = {
 			query: {method: 'GET', isArray: true}
 		};
@@ -53,8 +53,8 @@ function CheckIn($resource) {
 }
 
 function CheckOut($resource) {
-	var url = '/api/order/checkout/start/:startdate/end/:enddate',
-		paramDefaults = {startdate: '@sDate', enddate: '@eDate'},
+	var url = '/api/order/checkout/date/:date',
+		paramDefaults = {date: '@date'},
 		actions = {
 			query: {method: 'GET', isArray: true}
 		};

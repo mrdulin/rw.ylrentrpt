@@ -27,8 +27,8 @@ function config($stateProvider, $urlRouterProvider, $resourceProvider, cfpLoadin
 			controller: 'SummaryController as vm',
 			resolve: {
 				summarys: function(SummaryService, $log) {
-					var today = moment().format('YYYY-M-DD');
-					var date = {startDate: today, endDate: today};
+					var today = moment().format('YYYY-M-D');
+					var date = {date: today};
 					return SummaryService.getSummary(date).$promise.then(function(data) {
 						return SummaryService.setOccupancyRate(data);
 					}, function(error) {

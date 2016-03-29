@@ -7,12 +7,9 @@ TomorrowoccupancyController.$inject = ['$log', 'CheckInService', 'CommonService'
 function TomorrowoccupancyController($log, CheckInService, CommonService) {
 
 	var vm = this;
-	var startDate = moment(moment().subtract(1, 'd')),
-		endDate = moment(),
-		format = 'YYYY-M-D';
+	var format = 'YYYY-M-D';
 
-	var initDate = {startDate: startDate, endDate: endDate};
-	var date = {startdate: startDate.format(format), enddate: endDate.format(format)};
+	var date = {date: moment().format(format)};
 
 	angular.extend(vm, {
 		datas: [],
@@ -26,46 +23,17 @@ function TomorrowoccupancyController($log, CheckInService, CommonService) {
 			long: '长租'
 		},
 		rentType: '全部',
-		datePicker: {
+		datepicker: {
+			open: false,
+			date: new Date(),
 			options: {
-				autoApply: true,
-				locale:  {
-			        "format": format,
-			        "separator": " ~ ",
-			        "daysOfWeek": [
-			            "周日",
-			            "周一",
-			            "周二",
-			            "周三",
-			            "周四",
-			            "周五",
-			            "周六"
-			        ],
-			        "monthNames": [
-			            "一月",
-			            "二月",
-			            "三月",
-			            "四月",
-			            "五月",
-			            "六月",
-			            "七月",
-			            "八月",
-			            "九月",
-			            "十月",
-			            "十一月",
-			            "十二月"
-			        ],
-			        "firstDay": 1
-			    },
-			    eventHandlers : {
-		            'apply.daterangepicker': dateChange
-		        }
-			},
-			date: initDate
+			    maxDate: new Date(2020, 1, 1),
+			    startingDay: 1
+			}
 		},
-
 		query: query,
-		order: order
+		order: order,
+		dateChange: dateChange
 	});
 
 	function order(predicate) {
@@ -74,19 +42,15 @@ function TomorrowoccupancyController($log, CheckInService, CommonService) {
 	}
 
 	function dateChange() {
-		query({
-			startdate: vm.datePicker.date.startDate.format(format),
-			enddate: vm.datePicker.date.endDate.format(format)
-		});
+		query({date: moment(vm.datepicker.date).format(format)});
 	}
 
 	query(date);
 	function query(date) {
 		CheckInService.query(date).$promise.then(function(data) {
-			$log.info(data);
 			vm.datas = data;
 		}, function(error) {
-			alert(error.msg);
+			alert('请求数据失败，请重试！');
 		});
 	}
 

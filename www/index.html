@@ -11,7 +11,6 @@
     <!-- build:css -->
     <link rel="stylesheet" type="text/css" href="./node_modules/bootstrap/dist/css/bootstrap-theme.css">
     <link rel="stylesheet" type="text/css" href="./node_modules/bootstrap/dist/css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="./node_modules/bootstrap-daterangepicker/daterangepicker.css">
     <link rel="stylesheet" type="text/css" href="./node_modules/angular-loading-bar/build/loading-bar.css">
     <link rel="stylesheet" type="text/css" href="./src/site.css">
     <!-- endbuild -->
@@ -27,7 +26,7 @@
 		        <img alt="YLRent"/>
 		      </a>
 		    </div>
-              <p class="pull-right">数据更新于: <span ng-bind="vm.lastupdatetime.atWhen | dateFormat"></span></p>
+              <!-- <p class="pull-right">数据更新于: <span ng-bind="vm.lastupdatetime.atWhen | dateFormat"></span></p> -->
 		  </div>
 		</nav>
 	</div>
@@ -58,17 +57,13 @@
     <script src="./node_modules/moment/moment.js"></script>
     <script src="./node_modules/underscore/underscore.js"></script>
     <script src="./node_modules/jquery/dist/jquery.js"></script>
-    <script src="./node_modules/bootstrap-daterangepicker/daterangepicker.js"></script>
-    <script src="./node_modules/angular-daterangepicker/js/angular-daterangepicker.js"></script>
     <script src="./node_modules/angular-loading-bar/build/loading-bar.js"></script>
-    <script src="./node_modules/floatthead/dist/jquery.floatThead.js"></script>
 
 
     <script src="./src/app.js"></script>
     <script src="./src/router.js"></script>
     <script src="./src/service.js"></script>
     <script src="./src/filter.js"></script>
-    <script src="./src/directive.js"></script>
     <script src="./src/occupancy/summary/summary.controller.js"></script>
     <script src="./src/occupancy/summary/summary.service.js"></script>
     <script src="./src/occupancy/cannotoccupancy/cannotoccupancy.controller.js"></script>

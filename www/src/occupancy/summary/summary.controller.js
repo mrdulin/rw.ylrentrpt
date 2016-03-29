@@ -60,7 +60,7 @@ function SummaryController($log, SummaryService, summarys, hotels, $filter, $sco
 
 	function dateChange() {
 		var newDate = moment(vm.datepicker.date).format('YYYY-M-D');
-		var params = {startDate: newDate, endDate: newDate};
+		var params = {date: newDate};
 		SummaryService.getSummary(params).$promise.then(function(data) {
 			vm.summarys = SummaryService.setOccupancyRate(data);
 			getOccupany();

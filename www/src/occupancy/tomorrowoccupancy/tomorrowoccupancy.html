@@ -1,16 +1,27 @@
 <div id="checkin">
 	<div class="row">
-		<div class="col-md-4 col-sm-7 col-xs-12 date-picker-control">
-			<label for="dateRangePicker">日期选择</label>
-			<input date-range-picker
-				id="dateRangePicker" 
-				options="vm.datePicker.options"
-				class="form-control date-picker" 
-				type="text" 
-				ng-model="vm.datePicker.date"/>
-			<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+		<div class="col-md-3 col-sm-6 col-xs-12">
+			<label for="datePicker">日期选择</label>
+			<div class="input-group">
+				<input id="datePicker" type="text" 
+	                    class="form-control" 
+	                    ng-model="vm.datepicker.date" 
+	                    is-open="vm.datepicker.open" 
+	                    uib-datepicker-popup
+	                    datepicker-options="vm.datepicker.options" 
+	                    ng-change="vm.dateChange()"
+	                    current-text="今天"
+	                    clear-text="清除"
+	                    close-text="关闭"/>
+
+	            <span class="input-group-btn">
+	                <button type="button" class="btn btn-default" ng-click="vm.datepicker.open = true;">
+	                    <i class="glyphicon glyphicon-calendar"></i>
+	                </button>
+	            </span>
+            </div>
 		</div>
-		<div class="col-md-2 col-sm-5 col-xs-12">
+		<div class="col-md-3 col-sm-6 col-xs-12">
 			<label for="rentType">租赁类型</label>
 			<select id="rentType" class="form-control wp100"
 				ng-model="vm.rentType" 
@@ -40,19 +51,18 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="data in vm.datas | filter: {rentalType: vm.rentType === '全部' ? '' : vm.rentType} | orderBy:vm.predicate:vm.reverse">
-							<td ng-bind="data.hotelName"></td>
-							<td ng-bind="data.roomName"></td>
-							<td ng-bind="data.customer"></td>	
-							<td ng-bind="vm.formatDate(data.checkintime)"></td>					
-							<td ng-bind="vm.formatDate(data.checkouttime)"></td>	
-							<td ng-bind="data.rentalType"></td>
+						<tr ng-repeat="data in vm.datas | filter: {rentalType: vm.rentType === '全部' ? '' : vm.rentType} | orderBy:vm.predicate:vm.reverse as filterDatas">
+							<td ng-bind="::data.hotelName"></td>
+							<td ng-bind="::data.roomName"></td>
+							<td ng-bind="::data.customer"></td>	
+							<td ng-bind="::vm.formatDate(data.checkintime)"></td>					
+							<td ng-bind="::vm.formatDate(data.checkouttime)"></td>	
+							<td ng-bind="::data.rentalType"></td>
 							<td >
 								<a tooltip-trigger="outsideClick" 
 									tooltip-placement="left"
-									uib-tooltip="{{data.handwork_desc}}" 
-									ng-class="{'cursor-pointer': data.handwork_desc, disabled: data.handwork_desc.length === 0}"
-									ng-disabled="data.handwork_desc.length === 0">
+									uib-tooltip="{{::(data.handwork_desc | trim).length === 0 ? '' : data.handwork_desc}}"  
+									ng-class="{'cursor-pointer': data.handwork_desc}">
 									查看
 								</a>
 							</td>
@@ -63,7 +73,7 @@
 		</div>
 	</div>
 
-	<div class="row" ng-if="vm.datas.length === 0">
+	<div class="row" ng-if="vm.datas.length === 0 || filterDatas.length === 0">
 		<div class="col-md-12 col-sm-12 col-xs-12">
 			<p class="tc">暂无数据</p>
 		</div>

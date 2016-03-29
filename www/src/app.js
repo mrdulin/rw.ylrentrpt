@@ -5,7 +5,6 @@ angular.module('ylrent.rpt', [
 	'ngAnimate',
 	'ui.bootstrap',
 	'ngTouch',
-	'daterangepicker',
 	'ylrent.rpt.controllers',
 	'ylrent.rpt.services',
 	'ylrent.rpt.directives',
@@ -61,17 +60,17 @@ function MainController($log, CommonService) {
 						baseKey: 'occupancy'
 					}
 				]
-			},
-			order: {
-				name: '订单汇总',
-				subMenus: [
-					{
-						key: 'daily',
-						name: '日租订单',
-						baseKey: 'order'
-					}
-				]
 			}
+			// order: {
+			// 	name: '订单汇总',
+			// 	subMenus: [
+			// 		{
+			// 			key: 'daily',
+			// 			name: '日租订单',
+			// 			baseKey: 'order'
+			// 		}
+			// 	]
+			// }
 		}
 	});
 

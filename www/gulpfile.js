@@ -14,16 +14,12 @@ var path = {
         "./node_modules/moment/moment.js",
         "./node_modules/underscore/underscore.js",
         "./node_modules/jquery/dist/jquery.js",
-        "./node_modules/bootstrap-daterangepicker/daterangepicker.js",
-        "./node_modules/angular-daterangepicker/js/angular-daterangepicker.js",
         "./node_modules/angular-loading-bar/build/loading-bar.js",
-        "./node_modules/floatthead/dist/jquery.floatThead.js",
         "./src/**/*.js"
     ],
     styles: [
         "./node_modules/bootstrap/dist/css/bootstrap-theme.css",
         "./node_modules/bootstrap/dist/css/bootstrap.css",
-        "./node_modules/bootstrap-daterangepicker/daterangepicker.css",
         "./node_modules/angular-loading-bar/build/loading-bar.css",
         "./src/**/*.css"
     ]
