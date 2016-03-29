@@ -41,67 +41,57 @@ router.get('/hotel/:hotelNo/start/:startdate/end/:enddate',(req,res)=>{
 		});
 })
 
-router.get('/test',(req,res)=>{
-	var roomList = [];
-	getHotels().then(result=>{
-		genereateSummary(result);
-	});
-
-})
-
-
-
-function getHotels() {
-	return new Promise((resolve,reject)=>{
-
-		alirdspool.query("select id,title from tbl_building",(err,result)=>{
-			if(err)
-			{
-				console.log(err);
-			}
-			else
-			{
-				return resolve(result);
-			}
-		})
-	})
-}
-
-function getRoomCount(hotelid){
-	alirdspool.query("select count(*) as total from tbl_house where building = ?",hotelid,function(err,result){
-		var totalCount = 0;
-		var 
-		if(err) console.log(err);
+//get status summary for production mysql
+router.get('/summary/date/:date',(req,res)=>{
+	alirdspool.query("select count(*) as totalRooms, b.title as hotel ,b.id as hotelid from tbl_house as h join tbl_building as b on h.building = b.id group by b.id",(err,result)=>{
+		var hotellist = [];
+		if(err) {console.log(err)}
 		else
 		{
-			console.log(result);
+			async.each(result,
+
+			(item,callback)=>{
+				console.log('handling ',item.hotel);
+				alirdspool.query("select count(*) as occupyRoomCount from tbl_house_status as s join tbl_house as h on s.house =h.id join tbl_building as b on h.building = b.id where b.id = ? and s.housedate=? and s.status!=1",[item.hotelid,req.params.date],(err,result)=>{
+					
+					if(err) {console.log(err)}
+					else
+					{
+						var emptyRoomCount = 0;
+						var oooRoomCount =0;
+						emptyRoomCount = item.totalRooms - result[0].occupyRoomCount;
+						//console.log(result[0].occupyRoomCount);
+						var query = alirdspool.query("select count(*)  as oooRoomCount from tbl_house_status as s join tbl_house as h on s.house =h.id join tbl_building as b on h.building = b.id where b.id = ? and s.housedate=? and s.status not in (1,3,5,6)",[item.hotelid,req.params.date],(err,result)=>{
+							if(err) {console.log(err)}
+								else
+								{
+									
+									oooRoomCount = result[0].oooRoomCount;
+									hotellist.push({
+										'emptyRoomCount':emptyRoomCount,
+										'oooRoomCount':oooRoomCount,
+										'TotalRoomCount':item.totalRooms,
+										'hotelName':item.hotel,
+										'occupyRoomCount':item.totalRooms-emptyRoomCount-oooRoomCount,
+										'statusDate':req.params.date
+										});
+									callback();
+								}
+						})
+
+						
+						
+					}
+				})
+			},
+
+			(err)=>{
+				console.log(err);
+				res.json(hotellist);
+			})
 		}
-		//pool.query("select * ")
 	})
-
-	//console.log('query ',hotelNo);
-}
-
-
-
-function genereateSummary(result)
-{
-	var counter = 0;
-	console.log("result length ",result.length );
-	async.whilst(
-		()=>{return counter<result.length},
-		(callback)=>{
-			getRoomCount(result[counter].id);
-			counter++;
-			callback(null);
-			
-		},
-		(err)=>{
-		if(err)
-			console.log(err);
-		}
-	)
-}
+})
 
 
 exports = module.exports = router;

@@ -132,5 +132,82 @@ router.get('/ali/list',(req,res)=>{
 	})
 })
 
+//get checkins from production
+router.get('/checkins/date/:date',(req,res)=>{
+	alirdspool.query("select ch.ordersource as channelName, ch.startdate as checkintime, ch.enddate as checkouttime,ch.customername as customer, ch.memo as handwork_desc,b.title as hotelName , ch.cost as rentMoney, h.houseno as roomName, ch.customermobile as telno, ch.status from tbl_house_checkin as ch join tbl_house as h on ch.house = h.id join tbl_building as b on h.building = b.id join tbl_ordersource as os on ch.ordersource = os.id where (cast(ch.startdate as date) = ? and ch.status=0) or (cast(ch.checkindate as date) = ? and ch.status=1) or (cast(ch.checkindate as date) = ? and ch.status=2)",
+		[req.params.date,req.params.date,req.params.date],(err,result)=>{
+		if(err) {console.log(err);}
+		else
+		{
+			result.map((item)=>{
+				var rentalType = '';
+				var startdate = moment(item.checkintime);
+				var enddate = moment(item.checkouttime);
+				var diffmonth = enddate.diff(startdate,'month');
+				if(diffmonth==0) rentalType='短租';
+				if(diffmonth>0&&diffmonth<=6) rentalType='中短租';
+				if(diffmonth>6) rentalType='长租';
+				
+				item.rentalType = rentalType;
+
+				switch(item.status)
+				{
+					case '1':
+						item.statusName = '已入住';
+						break;
+					case '0':
+						item.statusName = '未入住';
+						break;
+					case '2':
+						item.statusName = '已退房';
+						break;	
+				};
+
+			})
+		}
+
+		res.json(result).end();
+	})
+})
+
+//get checkouts from production
+router.use('/checkout/date/:date',(req,res)=>{
+	alirdspool.query("select ch.ordersource as channelName, ch.startdate as checkintime, ch.enddate as checkouttime,ch.customername as customer, ch.memo as handwork_desc,b.title as hotelName , ch.cost as rentMoney, h.houseno as roomName, ch.customermobile as telno, ch.status from tbl_house_checkin as ch join tbl_house as h on ch.house = h.id join tbl_building as b on h.building = b.id join tbl_ordersource as os on ch.ordersource = os.id where (cast(ch.enddate as date) = ? and ch.status=0) or (cast(ch.checkoutdate as date) = ? and ch.status=1) or (cast(ch.checkoutdate as date) = ? and ch.status=2)",
+		[req.params.date,req.params.date,req.params.date],(err,result)=>{
+		if(err) {console.log(err);}
+		else
+		{
+			result.map((item)=>{
+				var rentalType = '';
+				var startdate = moment(item.checkintime);
+				var enddate = moment(item.checkouttime);
+				var diffmonth = enddate.diff(startdate,'month');
+				if(diffmonth==0) rentalType='短租';
+				if(diffmonth>0&&diffmonth<=6) rentalType='中短租';
+				if(diffmonth>6) rentalType='长租';
+				
+				item.rentalType = rentalType;
+
+				switch(item.status)
+				{
+					case '1':
+						item.statusName = '已入住';
+						break;
+					case '0':
+						item.statusName = '未入住';
+						break;
+					case '2':
+						item.statusName = '已退房';
+						break;	
+				};
+
+			})
+		}
+
+		res.json(result).end();
+	})
+})
+
+
 exports = module.exports = router;
 
