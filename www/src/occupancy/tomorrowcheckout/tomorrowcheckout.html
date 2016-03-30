@@ -37,14 +37,20 @@
 					<tr>
 						<th class="cursor-pointer" ng-click="vm.order('hotelName');">
                         	小区
-                        	<span ng-if="vm.predicate" 
+                        	<span ng-if="vm.predicate === 'hotelName'" 
                         		ng-class="{'glyphicon-triangle-bottom': vm.reverse, 'glyphicon-triangle-top': !vm.reverse}" 
                         		class="glyphicon">
                         	</span>
                     	</th>
 						<th>房号</th>
 						<th>入住客人</th>
-						<th>入住状态</th>
+						<th class="cursor-pointer" ng-click="vm.order('statusName');">
+							入住状态
+							<span ng-if="vm.predicate === 'statusName'" 
+                        		ng-class="{'glyphicon-triangle-bottom': vm.reverse, 'glyphicon-triangle-top': !vm.reverse}" 
+                        		class="glyphicon">
+                        	</span>
+						</th>
 						<th>离店时间</th>
 						<th>入住时间</th>
 						<th>租赁类型</th>
