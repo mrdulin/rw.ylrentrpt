@@ -135,9 +135,8 @@ router.get('/ali/list',(req,res)=>{
 
 //get checkins from production
 router.get('/checkins/date/:date',(req,res)=>{
-	var query = alirdspool.query("select os.title as channelName, ch.cost as rentMoney,ch.startdate as checkintime, ch.enddate as checkouttime,ch.customername as customer, ch.memo as handwork_desc,b.title as hotelName , ch.cost as rentMoney, h.houseno as roomName, ch.customermobile as telno, ch.status from tbl_house_checkin as ch join tbl_house as h on ch.house = h.id join tbl_building as b on h.building = b.id left join tbl_ordersource as os on ch.ordersource = os.id where (cast(ch.startdate as date) = ? and ch.status=0) or (cast(ch.checkindate as date) = ? and ch.status=1) or (cast(ch.checkindate as date) = ? and ch.status=2)",
+	alirdspool.query("select os.title as channelName, ch.ispay as payType,ch.cost as rentMoney,ch.startdate as checkintime, ch.enddate as checkouttime,ch.customername as customer, ch.memo as handwork_desc,b.title as hotelName , ch.cost as rentMoney, h.houseno as roomName, ch.customermobile as telno, ch.status from tbl_house_checkin as ch join tbl_house as h on ch.house = h.id join tbl_building as b on h.building = b.id left join tbl_ordersource as os on ch.ordersource = os.id where (cast(ch.startdate as date) = ? and ch.status=0) or (cast(ch.checkindate as date) = ? and ch.status=1) or (cast(ch.checkindate as date) = ? and ch.status=2)",
 		[req.params.date,req.params.date,req.params.date],(err,result)=>{
-		console.log(query.sql);
 		if(err) {console.log(err);}
 		else
 		{
@@ -165,6 +164,25 @@ router.get('/checkins/date/:date',(req,res)=>{
 						break;	
 				};
 
+				switch(item.payType)
+				{
+					case '1':
+						item.payType = '到店现付';
+						break;
+					case '2':
+						item.payType = '已担保';
+						break;
+					case '3':
+						item.payType = '全额支付';
+						break;
+					case '4':
+						item.payType = '部分预付';
+						break;	
+					default:
+						item.payType ='请看备注';
+
+				}
+
 			})
 		}
 
@@ -174,8 +192,9 @@ router.get('/checkins/date/:date',(req,res)=>{
 
 //get checkouts from production
 router.use('/checkout/date/:date',(req,res)=>{
-	alirdspool.query("select ch.ordersource as channelName, ch.cost as rentMoney,ch.startdate as checkintime, ch.enddate as checkouttime,ch.customername as customer, ch.memo as handwork_desc,b.title as hotelName , ch.cost as rentMoney, h.houseno as roomName, ch.customermobile as telno, ch.status from tbl_house_checkin as ch join tbl_house as h on ch.house = h.id join tbl_building as b on h.building = b.id join tbl_ordersource as os on ch.ordersource = os.id where (cast(ch.enddate as date) = ? and ch.status=0) or (cast(ch.checkoutdate as date) = ? and ch.status=1) or (cast(ch.checkoutdate as date) = ? and ch.status=2)",
+	var query = alirdspool.query("select ch.ordersource as channelName, ch.cost as rentMoney,ch.startdate as checkintime, ch.enddate as checkouttime,ch.customername as customer, ch.memo as handwork_desc,b.title as hotelName , ch.cost as rentMoney, h.houseno as roomName, ch.customermobile as telno, ch.status from tbl_house_checkin as ch join tbl_house as h on ch.house = h.id join tbl_building as b on h.building = b.id left join tbl_ordersource as os on ch.ordersource = os.id where (cast(ch.enddate as date) = ? and ch.status=0) or (cast(ch.enddate as date) = ? and ch.status=1) or (cast(ch.checkoutdate as date) = ? and ch.status=2)",
 		[req.params.date,req.params.date,req.params.date],(err,result)=>{
+			console.log(query.sql);
 		if(err) {console.log(err);}
 		else
 		{
