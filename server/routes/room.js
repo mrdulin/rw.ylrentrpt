@@ -169,4 +169,24 @@ router.get('/oooroomdetails/date/:date',(req,res)=>{
 	})
 })
 
+
+//find Room from production
+router.get('/find/:roomName',(req,res)=>{
+	var query = alirdspool.query("SELECT h.`houseno` ,b.`title` ,h.`uuid` from `tbl_house` as h JOIN `tbl_building` as b on h.`building` =b.id WHERE h.`title` like ?",'%'+req.params.roomName+'%',(err,result)=>{
+		console.log(query.sql);
+		if(err) {console.log(err);}
+		else
+		{
+			result.map((room)=>{
+				if(!room.uuid)
+					room.isDdingLock = false;
+				else
+					room.isDdingLock = true;
+			})
+			res.json(result);
+		}
+	})
+})
+
+
 exports = module.exports = router;
