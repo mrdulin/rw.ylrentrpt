@@ -10,7 +10,7 @@ var request = require('request');
 
 mongoose.connect(config.database);
 app.use(bodyParser());
-app.use(express.static('../www'));
+app.use(express.static('../www/dist'));
 
 // app.param('hotelNo',(req,res,next,hotelNo)=>{
 //     req.hotel = hotelNo;
