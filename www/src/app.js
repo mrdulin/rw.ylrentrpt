@@ -23,9 +23,10 @@ angular
     .module('ylrent.rpt')
     .run(run);
 
-function run($http) {
+function run($http, $log) {
 
     var user = angular.fromJson(localStorage.getItem('user'));
+    $log.info('localStorage user', user);
 
     if(user && user.token) {
         $http.defaults.headers.common["x-access-token"] = user.token;
@@ -145,6 +146,7 @@ function LoginController($uibModalInstance, $log, $http, $timeout, $scope, authS
                     config.headers["x-access-token"] = token;
                     data.token = token;
                     localStorage.setItem('user', angular.toJson(data));
+                    $http.defaults.headers.common["x-access-token"] = token;
                     return config;
                 });
             } else {
@@ -159,16 +161,16 @@ function LoginController($uibModalInstance, $log, $http, $timeout, $scope, authS
         });
     }
 
-    function close() {
-        vm.isLogining = false;
-        $uibModalInstance.dismiss();
-    }
-
     function _startCountDown() {
         timer = $timeout(function() {
             vm.err = '';
             _destroyTimer();
         }, 3000);
+    }
+
+    function close() {
+        authService.loginCancelled();
+        $uibModalInstance.dismiss();
     }
 
     function _destroyTimer() {
@@ -180,7 +182,7 @@ function LoginController($uibModalInstance, $log, $http, $timeout, $scope, authS
 
     $scope.$on('event:auth-loginConfirmed', function() {
         $log.info('loginConfirmed');
-        vm.close();
+        $uibModalInstance.dismiss();
     });
 
     $scope.$on('$destroy', function() {
