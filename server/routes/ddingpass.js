@@ -2,6 +2,7 @@ var express = require('express');
 var mongoose    = require('mongoose');
 var jwt    = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var User   = require('../model/user');
+var OpLog = require('../model/oplog');
 var config = require('../config');
 var router = express.Router();
 var request = require('request');
@@ -34,6 +35,7 @@ router.use((req,res,next)=>{
         });
 
     }
+
 })
 
 router.get('/',(req,res)=>{
@@ -49,6 +51,7 @@ router.get('/getDynamicPass/:uuid',(req,res)=>{
             res.json(JSON.parse(body));
         })
     });
+
 })
 
 function getAccessToken()
