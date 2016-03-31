@@ -20,11 +20,10 @@ function GetPasswordController($log, GetPasswordService, $scope, $http) {
             if(err.status === 404) {
                 alert('无此房源信息');
             }
-        })
+        });
     }
 
     function getPassword(room) {
-        $log.info(room);
         var uuid = room.uuid;
         if(uuid) {
             var dingPasswordResource = GetPasswordService.dingPassword();
@@ -42,7 +41,7 @@ function GetPasswordController($log, GetPasswordService, $scope, $http) {
                 alert('获取锁密码失败，请重试！');
             }).finally(function() {
                 room.isGetting = false;
-            })
+            });
         }
     }
 }
