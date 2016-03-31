@@ -27,7 +27,7 @@ function run($http) {
 
     var user = angular.fromJson(localStorage.getItem('user'));
 
-    if(angular.isDefined(user)) {
+    if(user && user.token) {
         $http.defaults.headers.common["x-access-token"] = user.token;
     }
 }
