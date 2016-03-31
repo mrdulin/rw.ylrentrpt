@@ -2,7 +2,7 @@ angular
     .module('ylrent.rpt.controllers')
     .controller('GetPasswordController', GetPasswordController);
 
-function GetPasswordController($log, GetPasswordService, $scope) {
+function GetPasswordController($log, GetPasswordService, $scope, $http) {
     var vm = this;
 
     angular.extend(vm, {
@@ -33,9 +33,11 @@ function GetPasswordController($log, GetPasswordService, $scope) {
                 if(data.ErrNo !== 0) {
                     alert(data.ErrMsg);
                     localStorage.removeItem('user');
+                    delete $http.defaults.headers.common["x-access-token"];
                     return ;
+                } else {
+                    room.pwd = data.password;
                 }
-                room.pwd = data.password;
             }, function(err) {
                 alert('获取锁密码失败，请重试！');
             }).finally(function() {
