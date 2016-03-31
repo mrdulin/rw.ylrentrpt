@@ -59,7 +59,7 @@ router.get('/getDynamicPass/:uuid',(req,res)=>{
 				console.log('log saved');
 				//console.log(OpLog);
 			});
-			res.json(JSON.parse(body).password);
+			res.json(JSON.parse(body));
 		})
 	});
 })
