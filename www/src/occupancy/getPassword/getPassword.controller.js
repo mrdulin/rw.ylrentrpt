@@ -30,8 +30,12 @@ function GetPasswordController($log, GetPasswordService, $scope) {
             var dingPasswordResource = GetPasswordService.dingPassword();
             room.isGetting = true;
             dingPasswordResource.get({uuid: uuid}).$promise.then(function(data) {
+                if(data.ErrNo !== 0) {
+                    alert(data.ErrMsg);
+                    localStorage.removeItem('user');
+                    return ;
+                }
                 room.pwd = data.password;
-                $log.info('password:', room.pwd);
             }, function(err) {
                 alert('获取锁密码失败，请重试！');
             }).finally(function() {
