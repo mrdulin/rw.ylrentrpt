@@ -26,7 +26,7 @@ app.use('/api/update',route.Update);
 passRoutes = express.Router();
 
 
-app.get('/getddingtoken',(req,res)=>{
+app.get('/createuser',(req,res)=>{
 
 
 	/*request.post({
@@ -52,19 +52,6 @@ app.get('/getddingtoken',(req,res)=>{
 		admin: true 
 	});
 	helen.save(function(err) {
-		if (err) throw err;
-
-		console.log('User saved successfully');
-		res.json({ success: true });
-	});
-
-
-	var zyg = new User({ 
-		name: 'zyg', 
-		password: 'Abcd1234',
-		admin: true 
-	});
-	zyg.save(function(err) {
 		if (err) throw err;
 
 		console.log('User saved successfully');
