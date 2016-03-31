@@ -121,7 +121,7 @@ function LoginController($uibModalInstance, $log, $http, $timeout, $scope, authS
     var timer = null;
 
     angular.extend(vm, {
-        close: $uibModalInstance.dismiss,
+        close: close,
         login: login,
         name: '',
         password: '',
@@ -157,6 +157,11 @@ function LoginController($uibModalInstance, $log, $http, $timeout, $scope, authS
         }).finally(function() {
             vm.isLogining = false;
         });
+    }
+
+    function close() {
+        vm.isLogining = false;
+        $uibModalInstance.dismiss();
     }
 
     function _startCountDown() {
