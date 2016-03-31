@@ -143,6 +143,7 @@ function LoginController($uibModalInstance, $log, $http, $timeout, $scope, authS
                 var token = result.token;
                 authService.loginConfirmed('success', function(config){
                     config.headers["x-access-token"] = token;
+                    debugger;
                     data.token = token;
                     localStorage.setItem('user', angular.toJson(data));
                     return config;
