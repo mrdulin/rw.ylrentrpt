@@ -10,7 +10,7 @@ var request = require('request');
 
 mongoose.connect(config.database);
 app.use(bodyParser());
-app.use(express.static('../www'));
+app.use(express.static('../www/dist'));
 
 // app.param('hotelNo',(req,res,next,hotelNo)=>{
 //     req.hotel = hotelNo;
@@ -57,6 +57,8 @@ app.get('/createUser',(req,res)=>{
         console.log('User saved successfully');
         res.json({ success: true });
     });
+});
+
 app.get('/getddingtoken',(req,res)=>{
 
 
