@@ -15,6 +15,7 @@ var path = {
         "./node_modules/underscore/underscore.js",
         "./node_modules/jquery/dist/jquery.js",
         "./node_modules/angular-loading-bar/build/loading-bar.js",
+        "./node_modules/angular-http-auth/src/http-auth-interceptor.js",
         "./src/**/*.js"
     ],
     styles: [

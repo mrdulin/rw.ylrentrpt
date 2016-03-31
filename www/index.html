@@ -4,9 +4,9 @@
     <title>YLRent Report</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="format-detection" content="telephone=no" />
-    <meta name="format-detection" content="email=no" />
-    <meta http-equiv="X-UA-Compatible" content="IE=11; IE=10; IE=9; IE=8; IE=7; IE=EDGE" />
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="format-detection" content="email=no"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=11; IE=10; IE=9; IE=8; IE=7; IE=EDGE"/>
 
     <!-- build:css -->
     <link rel="stylesheet" type="text/css" href="./node_modules/bootstrap/dist/css/bootstrap-theme.css">
@@ -18,65 +18,104 @@
 
 <body ng-controller="MainController as vm">
 
-	<div id="header">
-		<nav class="navbar navbar-default">
-		  <div class="container-fluid">
-		    <div class="navbar-header">
-		      <a class="navbar-brand" href="#">
-		        <img alt="YLRent"/>
-		      </a>
-		    </div>
-              <!-- <p class="pull-right">数据更新于: <span ng-bind="vm.lastupdatetime.atWhen | dateFormat"></span></p> -->
-		  </div>
-		</nav>
-	</div>
-    
-	<div class="container-fluid">
+<div id="header">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">
+                    YLRent
+                </a>
+            </div>
+            <!-- <p class="pull-right">数据更新于: <span ng-bind="vm.lastupdatetime.atWhen | dateFormat"></span></p> -->
+        </div>
+    </nav>
+</div>
 
-		<div class="row">
-			<div class="col-md-2">
-				<div ng-repeat="(key, obj) in vm.sidebar">
-					<h5 ng-bind="::obj.name"></h5>
-					<div class="list-group">
-						<a class="list-group-item" ui-sref-active="active" ng-repeat="menu in obj.subMenus" ui-sref="{{menu.baseKey}}.{{menu.key}}" ui-sref-opts="{reload: true}" ng-bind="::menu.name"></a>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-10" ui-view></div>
-		</div>
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-md-2">
+            <div ng-repeat="(key, obj) in vm.sidebar">
+                <h5 ng-bind="::obj.name"></h5>
+
+                <div class="list-group">
+                    <a class="list-group-item" ui-sref-active="active" ng-repeat="menu in obj.subMenus"
+                       ui-sref="{{menu.baseKey}}.{{menu.key}}" ui-sref-opts="{reload: true}" ng-bind="::menu.name"></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-10" ui-view></div>
     </div>
+</div>
 
-    <!-- build:js -->
-    <script src="./node_modules/angular/angular.js"></script>
-    <script src="./node_modules/angular-touch/angular-touch.js"></script>
-    <script src="./node_modules/angular-ui-router/release/angular-ui-router.js"></script>
-    <script src="./node_modules/angular-resource/angular-resource.js"></script>
-    <script src="./node_modules/angular-animate/angular-animate.js"></script>
-    <script src="./node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
-    <script src="./node_modules/angular-i18n/angular-locale_zh-cn.js"></script>
-    <script src="./node_modules/moment/moment.js"></script>
-    <script src="./node_modules/underscore/underscore.js"></script>
-    <script src="./node_modules/jquery/dist/jquery.js"></script>
-    <script src="./node_modules/angular-loading-bar/build/loading-bar.js"></script>
+<script type="text/ng-template" id="login.html">
+    <div id="login">
+        <div class="modal-header">
+            <button ng-click="vm.close()" type="button" class="close" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h5>用户登陆</h5>
+        </div>
+        <div class="modal-body">
+            <form name="loginForm" novalidate ng-submit="loginForm.$valid && vm.login()">
+                <fieldset ng-disabled="vm.isLogining">
+                    <div class="form-group">
+                        <label for="name" class="control-label sr-only">用户名</label>
+                        <input id="name" ng-model="vm.name" name="name" type="text" class="form-control" placeholder="用户名" required>
+                        <p class="text-danger" ng-if="loginForm.username.$error.required && loginForm.$submitted">请输入用户名</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="control-label sr-only">密码</label>
+                        <input id="password" ng-model="vm.password" name="password" class="form-control" type="password" placeholder="密码" required>
+                        <p class="text-danger" ng-if="loginForm.password.$error.required && loginForm.$submitted">请输入密码</p>
+                    </div>
+                    <div style="height: 16px; margin-bottom: 10px;">
+                        <p class="text-danger" ng-if="vm.err" ng-bind="vm.err"></p>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">
+                        {{ vm.isLogining ? '登陆中...' : '登陆'}}
+                    </button>
+                </fieldset>
+            </form>
+        </div>
+
+    </div>
+</script>
+
+<!-- build:js -->
+<script src="./node_modules/angular/angular.js"></script>
+<script src="./node_modules/angular-touch/angular-touch.js"></script>
+<script src="./node_modules/angular-ui-router/release/angular-ui-router.js"></script>
+<script src="./node_modules/angular-resource/angular-resource.js"></script>
+<script src="./node_modules/angular-animate/angular-animate.js"></script>
+<script src="./node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
+<script src="./node_modules/angular-i18n/angular-locale_zh-cn.js"></script>
+<script src="./node_modules/moment/moment.js"></script>
+<script src="./node_modules/underscore/underscore.js"></script>
+<script src="./node_modules/jquery/dist/jquery.js"></script>
+<script src="./node_modules/angular-loading-bar/build/loading-bar.js"></script>
+<script src="./node_modules/angular-http-auth/src/http-auth-interceptor.js"></script>
 
 
-    <script src="./src/app.js"></script>
-    <script src="./src/router.js"></script>
-    <script src="./src/service.js"></script>
-    <script src="./src/filter.js"></script>
-    <script src="./src/occupancy/summary/summary.controller.js"></script>
-    <script src="./src/occupancy/summary/summary.service.js"></script>
-    <script src="./src/occupancy/cannotoccupancy/cannotoccupancy.controller.js"></script>
-    <script src="./src/occupancy/cannotoccupancy/cannotoccupancy.service.js"></script>
-    <script src="./src/occupancy/tomorrowcheckout/tomorrowcheckout.controller.js"></script>
-    <script src="./src/occupancy/tomorrowcheckout/tomorrowcheckout.service.js"></script>
-    <script src="./src/occupancy/tomorrowoccupancy/tomorrowoccupancy.controller.js"></script>
-    <script src="./src/occupancy/tomorrowoccupancy/tomorrowoccupancy.service.js"></script>
-    <script src="./src/occupancy/oooReason/oooReason.controller.js"></script>
-    <script src="./src/occupancy/oooReason/oooReason.service.js"></script>
-    <script src="./src/order/daily/daily.controller.js"></script>
-    <script src="./src/order/daily/daily.service.js"></script>
-    <!-- endbuild -->
+<script src="./src/app.js"></script>
+<script src="./src/router.js"></script>
+<script src="./src/service.js"></script>
+<script src="./src/filter.js"></script>
+<script src="./src/occupancy/summary/summary.controller.js"></script>
+<script src="./src/occupancy/summary/summary.service.js"></script>
+<script src="./src/occupancy/cannotoccupancy/cannotoccupancy.controller.js"></script>
+<script src="./src/occupancy/cannotoccupancy/cannotoccupancy.service.js"></script>
+<script src="./src/occupancy/tomorrowcheckout/tomorrowcheckout.controller.js"></script>
+<script src="./src/occupancy/tomorrowcheckout/tomorrowcheckout.service.js"></script>
+<script src="./src/occupancy/tomorrowoccupancy/tomorrowoccupancy.controller.js"></script>
+<script src="./src/occupancy/tomorrowoccupancy/tomorrowoccupancy.service.js"></script>
+<script src="./src/occupancy/oooReason/oooReason.controller.js"></script>
+<script src="./src/occupancy/oooReason/oooReason.service.js"></script>
+<script src="./src/occupancy/getPassword/getPassword.controller.js"></script>
+<script src="./src/occupancy/getPassword/getPassword.service.js"></script>
+<script src="./src/order/daily/daily.controller.js"></script>
+<script src="./src/order/daily/daily.service.js"></script>
+<!-- endbuild -->
 </body>
 
 </html>

@@ -1,37 +1,37 @@
 .cursor-pointer{
-	cursor: pointer;
+    cursor: pointer;
 }
 
 .tc{text-align: center;}
 
 #summary input + .dropdown-menu{
-	width: calc(100% - 30px);
-	max-height: 200px;
-	overflow: auto;
+    width: calc(100% - 30px);
+    max-height: 200px;
+    overflow: auto;
 }
 
 body{
-	font-family: 'Microsoft Yahei';
-	min-width: 320px;
-	overflow: auto;
+    font-family: 'Microsoft Yahei';
+    min-width: 320px;
+    overflow: auto;
 }
 
 .wp100{width: 100%;}
 
 a.disabled{
-	color: #ddd;
+    color: #ddd;
 }
 
 tfoot td{
-	font-weight: bold;
+    font-weight: bold;
 }
 
 .row{
-	margin-bottom: 15px;
+    margin-bottom: 15px;
 }
 
 thead{background-color: #fff;}
 
 .uib-datepicker-popup{
-	z-index: 9999;
+    z-index: 9999;
 }
