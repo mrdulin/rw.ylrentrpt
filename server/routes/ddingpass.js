@@ -2,6 +2,7 @@ var express = require('express');
 var mongoose    = require('mongoose');
 var jwt    = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var User   = require('../model/user');
+var OpLog = require('../model/oplog');
 var config = require('../config');
 var router = express.Router();
 var request = require('request');
@@ -28,7 +29,7 @@ router.use((req,res,next)=>{
 
 		// if there is no token
 		// return an error
-		return res.status(403).send({ 
+		return res.status(401).send({ 
 			success: false, 
 			message: 'No token provided.'
 		});
@@ -46,6 +47,18 @@ router.get('/getDynamicPass/:uuid',(req,res)=>{
 		console.log(queryString);
 		request.get(queryString,(error, response, body)=>{
 			if(error) {console.log(error);res.json("dding invoke fail");}
+			console.log(req.decoded._doc.name);
+			var logEntry = new OpLog({ 
+				username: req.decoded._doc.name, 
+				content: 'get dynamic password',
+				datetime: Date().toString(),
+				lockuuid: req.params.uuid
+			});
+			logEntry.save(function(err) {
+				if (err) throw err;
+				console.log('log saved');
+				console.log(OpLog);
+			});
 			res.json(JSON.parse(body).password);
 		})
 	});

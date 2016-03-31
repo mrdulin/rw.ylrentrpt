@@ -8,7 +8,6 @@ var jwt    = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var config = require('./config');
 var request = require('request');
 
-app.set('superSecret', 'ilovesuecoco');
 mongoose.connect(config.database);
 app.use(bodyParser());
 app.use(express.static('../www/dist'));
@@ -38,26 +37,41 @@ app.get('/getddingtoken',(req,res)=>{
 	  console.log(JSON.parse(body).access_token);
 	  res.send(body);
 	});*/
-
+/*
 	getAccessToken().then((token)=>{
 		var queryString = "https://lockapi.dding.net/openapi/v1/get_dynamic_password_plaintext?access_token="+token+"&uuid="+"d6ba8716926fb8af86b14f47dc53e697";
 		console.log(queryString);
 		request.get(queryString,(error, response, body)=>{
 			res.send(body);
 		})
-	});
+	});*/
 
-	/*var jason = new User({ 
-		name: 'jason', 
-		password: 'password',
+	var helen = new User({ 
+		name: 'helen', 
+		password: 'Abcd1234',
 		admin: true 
 	});
-	jason.save(function(err) {
+	helen.save(function(err) {
 		if (err) throw err;
 
 		console.log('User saved successfully');
 		res.json({ success: true });
-	});*/
+	});
+
+
+	var zyg = new User({ 
+		name: 'zyg', 
+		password: 'Abcd1234',
+		admin: true 
+	});
+	zyg.save(function(err) {
+		if (err) throw err;
+
+		console.log('User saved successfully');
+		res.json({ success: true });
+	});
+
+
 })
 
 
