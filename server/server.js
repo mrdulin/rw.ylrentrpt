@@ -26,7 +26,7 @@ app.use('/api/update',route.Update);
 passRoutes = express.Router();
 
 
-app.get('/getddingtoken',(req,res)=>{
+app.get('/createuser',(req,res)=>{
 
 
     /*request.post({
@@ -38,6 +38,7 @@ app.get('/getddingtoken',(req,res)=>{
       res.send(body);
     });*/
 /*
+<<<<<<< HEAD
     getAccessToken().then((token)=>{
         var queryString = "https://lockapi.dding.net/openapi/v1/get_dynamic_password_plaintext?access_token="+token+"&uuid="+"d6ba8716926fb8af86b14f47dc53e697";
         console.log(queryString);
