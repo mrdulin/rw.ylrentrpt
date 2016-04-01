@@ -29,50 +29,6 @@ passRoutes = express.Router();
 app.get('/createuser',(req,res)=>{
 
 
-    /*request.post({
-      headers: {'content-type' : 'application/json'},
-      url:     'https://lockapi.dding.net/openapi/v1/access_token',
-      body:    JSON.stringify({client_id:"a9db4c60128af57be8cf1dbf",client_secret:"d6f7ab85b83e900154f4bcc85103e533"})
-    }, function(error, response, body){
-      console.log(JSON.parse(body).access_token);
-      res.send(body);
-    });*/
-/*
-<<<<<<< HEAD
-    getAccessToken().then((token)=>{
-        var queryString = "https://lockapi.dding.net/openapi/v1/get_dynamic_password_plaintext?access_token="+token+"&uuid="+"d6ba8716926fb8af86b14f47dc53e697";
-        console.log(queryString);
-        request.get(queryString,(error, response, body)=>{
-            res.send(body);
-        })
-    });*/
-
-    var helen = new User({
-        name: 'helen',
-        password: 'Abcd1234',
-        admin: true
-    });
-    helen.save(function(err) {
-        if (err) throw err;
-
-        console.log('User saved successfully');
-        res.json({ success: true });
-    });
-
-
-    var zyg = new User({
-        name: 'zyg',
-        password: 'Abcd1234',
-        admin: true
-    });
-    zyg.save(function(err) {
-        if (err) throw err;
-
-        console.log('User saved successfully');
-        res.json({ success: true });
-    });
-
-
 })
 
 
@@ -111,7 +67,7 @@ app.post('/authenticate',(req,res)=>{
                     // if user is found and password is right
                     // create a token
                     var token = jwt.sign(user, config.secret, {
-                        expiresIn: 86400 // expires in 24 hours
+                        expiresIn: 300 // expires in 24 hours
                     });
 
                     res.json({
