@@ -56,18 +56,18 @@ app.post('/authenticate',(req,res)=>{
             if (err) throw err;
 
             if (!user) {
-                res.json({ success: false, message: 'Authentication failed. User not found.' });
+                res.json({ success: false, message: '不存在此用户' });
             } else if (user) {
 
                 // check if password matches
                 if (user.password != req.body.password) {
-                    res.json({ success: false, message: 'Authentication failed. Wrong password.' });
+                    res.json({ success: false, message: '密码或者用户名错误' });
                 } else {
 
                     // if user is found and password is right
                     // create a token
                     var token = jwt.sign(user, config.secret, {
-                        expiresIn: 60*60*24 // expires in 24 hours
+                        expiresIn: 864000 // expires in 24 hours
                     });
 
                     res.json({
