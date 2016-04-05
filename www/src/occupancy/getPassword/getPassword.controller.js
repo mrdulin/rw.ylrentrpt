@@ -16,7 +16,7 @@ function GetPasswordController($log, GetPasswordService, $scope, $http, $rootSco
 
     function getTimePassword(room) {
         var modalInstance = $uibModal.open({
-            templateUrl: 'src/occupancy/getPassword/timePasswordModal.html',
+            templateUrl: './src/occupancy/getPassword/timePasswordModal.html',
             controller: 'TimePasswordController as vm',
             size: 'sm',
             resolve: {
@@ -29,12 +29,15 @@ function GetPasswordController($log, GetPasswordService, $scope, $http, $rootSco
         modalInstance.result.then(function (data) {
             GetPasswordService.getTimePassword(data).then(function (res) {
                 var result = res.data;
-                if (data.ErrNo !== 0) {
+                if (result.ErrNo !== 0) {
                     $rootScope.user = null;
                     localStorage.removeItem('user');
                     delete $http.defaults.headers.common["x-access-token"];
+                    alert(result.ErrMsg);
+                } else {
+
+                    alert('获取时效密码成功！\n有效期为' + moment(result.startime).format('YYYY-M-D HH:mm') + '至' + moment(result.endtime).format('YYYY-M-D HH:mm'));
                 }
-                alert(result.ErrMsg);
             }, function (err) {
                 alert('获取密码失败，请重试！');
                 $log.info(err);
