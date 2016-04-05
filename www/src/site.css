@@ -1,37 +1,68 @@
-.cursor-pointer{
+.cursor-pointer {
     cursor: pointer;
 }
 
-.tc{text-align: center;}
+.tc {
+    text-align: center;
+}
 
-#summary input + .dropdown-menu{
+#summary input + .dropdown-menu {
     width: calc(100% - 30px);
     max-height: 200px;
     overflow: auto;
 }
 
-body{
+body {
     font-family: 'Microsoft Yahei';
     min-width: 320px;
     overflow: auto;
 }
 
-.wp100{width: 100%;}
+.wp100 {
+    width: 100%;
+}
 
-a.disabled{
+.h20 {
+    height: 20px;
+}
+
+a.disabled {
     color: #ddd;
 }
 
-tfoot td{
+tfoot td {
     font-weight: bold;
 }
 
-.row{
+.row {
     margin-bottom: 15px;
 }
 
-thead{background-color: #fff;}
+thead {
+    background-color: #fff;
+}
 
-.uib-datepicker-popup{
+.mr10 {
+    margin-right: 10px;
+}
+
+.uib-datepicker-popup {
     z-index: 9999;
+}
+
+.status-icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    vertical-align: middle;
+}
+
+.status-icon.off {
+    background-color: red;
+}
+
+.status-icon.on {
+    background-color: green;
 }

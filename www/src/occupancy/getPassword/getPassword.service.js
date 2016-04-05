@@ -8,17 +8,25 @@ function GetPasswordService($log, $http, $resource) {
 
     angular.extend(service, {
         findRoom: findRoom,
-        dingPassword: dingPassword
+        dingPassword: dingPassword,
+        getTimePassword: getTimePassword
     });
 
     function findRoom(roomName) {
-        var url = '/api/room/find/' + roomName;
+        var url = '/pass/find/' + roomName;
         return $http.get(url);
     }
 
     function dingPassword() {
         var url = '/pass/getDynamicPass/:uuid'
-        return $resource(url, {uuid: '@uuid'});
+        return $resource(url, {
+            uuid: '@uuid'
+        });
+    }
+
+    function getTimePassword(data) {
+        var url = '/pass/addpass';
+        return $http.post(url, data);
     }
 
     return service;

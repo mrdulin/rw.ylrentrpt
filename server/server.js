@@ -2,9 +2,9 @@ var express = require('express');
 var app = express();
 var route = require('./routes');
 var bodyParser = require('body-parser');
-var mongoose    = require('mongoose');
-var User   = require('./model/user');
-var jwt    = require('jsonwebtoken'); // used to create, sign, and verify tokens
+var mongoose = require('mongoose');
+var User = require('./model/user');
+var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var config = require('./config');
 var request = require('request');
 
@@ -17,69 +17,81 @@ app.use(express.static('../www/dist'));
 //     console.log('params:'+hotelNo);
 //     next();
 // })
-app.use('/api/hotel',route.Hotel);
-app.use('/api/room',route.Room);
-app.use('/api/order',route.Order);
-app.use('/api/status',route.Status);
-app.use('/api/update',route.Update);
+app.use('/api/hotel', route.Hotel);
+app.use('/api/room', route.Room);
+app.use('/api/order', route.Order);
+app.use('/api/status', route.Status);
+app.use('/api/update', route.Update);
 
 passRoutes = express.Router();
 
 
-app.get('/createuser',(req,res)=>{
+app.get('/createuser', (req, res) => {
 
 
 })
 
 
-function getAccessToken()
-{
-    return new Promise((resolve, reject) =>{
+function getAccessToken() {
+    return new Promise((resolve, reject) => {
         request.post({
-          headers: {'content-type' : 'application/json'},
-          url:     'https://lockapi.dding.net/openapi/v1/access_token',
-          body:    JSON.stringify({client_id:config.ddingClientID,client_secret:config.ddingClientSecret})
-        }, (error, response, body)=>{
-            if(error) {reject('dding call fail');}
-          console.log(JSON.parse(body).access_token);
-           resolve(JSON.parse(body).access_token);
+            headers: {
+                'content-type': 'application/json'
+            },
+            url: 'https://lockapi.dding.net/openapi/v1/access_token',
+            body: JSON.stringify({
+                client_id: config.ddingClientID,
+                client_secret: config.ddingClientSecret
+            })
+        }, (error, response, body) => {
+            if (error) {
+                reject('dding call fail');
+            }
+            console.log(JSON.parse(body).access_token);
+            resolve(JSON.parse(body).access_token);
         });
     })
 }
 
 
-app.post('/authenticate',(req,res)=>{
+app.post('/authenticate', (req, res) => {
     User.findOne({
-            name: req.body.name
-        }, function(err, user) {
+        name: req.body.name
+    }, function (err, user) {
 
-            if (err) throw err;
+        if (err) throw err;
 
-            if (!user) {
-                res.json({ success: false, message: '不存在此用户' });
-            } else if (user) {
+        if (!user) {
+            res.json({
+                success: false,
+                message: '不存在此用户'
+            });
+        } else if (user) {
 
-                // check if password matches
-                if (user.password != req.body.password) {
-                    res.json({ success: false, message: '密码或者用户名错误' });
-                } else {
+            // check if password matches
+            if (user.password != req.body.password) {
+                res.json({
+                    success: false,
+                    message: '密码或者用户名错误'
+                });
+            } else {
 
-                    // if user is found and password is right
-                    // create a token
-                    var token = jwt.sign(user, config.secret, {
-                        expiresIn: 864000 // expires in 24 hours
-                    });
+                // if user is found and password is right
+                // create a token
+                var token = jwt.sign(user, config.secret, {
+                    expiresIn: 864000 // expires in 24 hours
+                });
 
-                    res.json({
-                        success: true,
-                        message: 'token for '+user.name,
-                        token: token
-                    });
-                }
-
+                res.json({
+                    success: true,
+                    message: 'token for ' + user.name,
+                    token: token
+                });
             }
 
-        });
+        }
+
+    });
 })
 
 
