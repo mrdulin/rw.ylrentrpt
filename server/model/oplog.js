@@ -5,6 +5,11 @@ var Schema = mongoose.Schema;
 module.exports = mongoose.model('OpLog', new Schema({ 
 	username: String, 
 	content: String,
-	datetime: String,
-	lockuuid:String
+	datetime: Date,
+	lockuuid:String,
+	starttime:Date,
+	endtime:Date,
+	cellphone:String,
+	name:String,
+	passwordId:String
 }));
