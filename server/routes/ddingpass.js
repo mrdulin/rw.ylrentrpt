@@ -58,7 +58,7 @@ router.post('/addpass', (req, res) => {
         }
         if (req.body.addtype == 2) {
             starttime = moment(req.body.starttime);
-            endtime = moment([starttime.year(), starttime.month(), starttime.date()]).add(req.body.span - 1, 'day').add(12, 'hour');
+            endtime = moment([starttime.year(), starttime.month(), starttime.date()]).add(req.body.span, 'day').add(12, 'hour');
         }
 
         getAccessToken().then((token) => {
