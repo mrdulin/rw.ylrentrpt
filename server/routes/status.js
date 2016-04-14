@@ -4,7 +4,7 @@ var pool = require('../service/mysqlConnect');
 var error = require('../error.js')
 var alirdspool = require('../service/alimysqlConnect');
 var async = require('async');
-
+var moment = require('moment');
 //get status summary occupancy rate for all hotels, MAX 90 days
 router.get('/start/:startdate/end/:enddate',(req,res) =>{
 	pool.query('SELECT hotelName,hotelNo,whichDay as statusDate, emptyRoomCount,outOfOrderRoomCount as oooRoomCount,orderedRoomCount as occupyRoomCount,totalCount as TotalRoomCount from ylrentdb.get_90days_hotel_status_summary where cast(whichDay as date) >= ? and cast(whichDay as date) <= ?',
@@ -90,6 +90,23 @@ router.get('/summary/date/:date',(req,res)=>{
 				res.json(hotellist);
 			})
 		}
+	})
+})
+
+router.get('/decoration',(req,res)=>{
+	alirdspool.query('SELECT h.`title` ,s.`status`,s.`housedate` ,COUNT(*) as days ,s.`operator`,h.`id`  FROM `tbl_house_status` as s join `tbl_house` as h on s.`house` =h.`id`  where s.`status` = 12 and s.`housedate` <= NOW() GROUP BY h.`title` ',(err,result)=>{
+		if(err) {console.log(err)}
+			else
+			{
+				result.map((item)=>{
+					if(moment(item.housedate).add(item.days-1,'day').format('YYYY-MM-DD') < moment().format('YYYY-MM-DD'))
+						item.progress = "已完工";
+					else
+						item.progress = "未完工";
+				})
+
+				res.send(result);
+			}
 	})
 })
 
