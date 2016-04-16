@@ -2,64 +2,21 @@ var express = require('express');
 var RoomRoute = require('./room');
 var router = express.Router();
 var pool = require('../service/mysqlConnect');
-var error = require('../error.js')
+var error = require('../error.js');
+var alirdspool = require('../service/alimysqlConnect');
 
 router.get('/',(req,res)=>{
-	//res.send('list');
-	pool.query('select * from hotel',(err,result)=>{
+	alirdspool.query('select id as hotelNo, title as hotelName from tbl_building',(err,result)=>{
 		if(err)
 		{
-			console.error(err);
-			return;
+			res.status(500).json(err);
 		}
-
 		else
 		{
 			res.json(result);
-		
-		}
-
-	});
-});
-
-
-router.get('/:hotelNo',(req,res)=>{
-	if(!req.params.hotelNo){res.send('no hotel');return};
-	pool.query('select * from hotel where hotelNo = ?',req.params.hotelNo,(err,result)=>{
-		if(err)
-		{
-			console.error(err);
-			return;
-		}
-
-		else
-		{
-			if(result.length == 0 ) res.status(501).json(error.NO_RECORD_FOUND);
-			res.json(result)
 		}
 	})
 })
-
-router.get('/:hotelNo/room',(req,res)=>{
-	pool.query('select r.roomName, r.roomNo,r.hasLock,r.hotelNo,h.hotelName,t.roomTypeNo,t.roomTypeName,t.roomTypePrice from room as r join room_type as t on r.roomTypeNo = t.roomTypeNo join hotel as h on r.hotelNo = h.hotelNo where r.hotelNo = ?',
-		req.params.hotelNo,(err,result)=>{
-			if(err)
-			{
-				console.error(err);
-				return;
-			}
-
-			else
-			{
-				if(result.length == 0 ) res.status(501).json(error.NO_RECORD_FOUND);
-				res.json(result);
-			}
-		}
-		)
-})
-
-router.use('/:hotelNo/room', RoomRoute);
-
 
 
 exports = module.exports = router;
