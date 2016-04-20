@@ -75,7 +75,7 @@ router.get('/oooroomdetail/date/:date',(req,res)=>{
 
 //get ooorooms from production 
 router.get('/ooorooms/date/:date',(req,res)=>{
-	alirdspool.query("select s.status ,b.title as hotelName,h.houseno as roomName from tbl_house_status as s join tbl_house as h on s.house =h.id join tbl_building as b on h.building = b.id where s.housedate=? and s.status not in (1,3,5,6)",req.params.date,(err,result)=>{
+	alirdspool.query("select s.status ,b.title as hotelName,h.houseno as roomName, h.contractNo from tbl_house_status as s join tbl_house as h on s.house =h.id join tbl_building as b on h.building = b.id where s.housedate=? and s.status not in (1,3,5,6)",req.params.date,(err,result)=>{
 		if(err) {console.log(err);}
 		else
 		{
