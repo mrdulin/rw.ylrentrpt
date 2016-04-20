@@ -6,7 +6,7 @@ var error = require('../error.js')
 var moment = require('moment');
 
 
-router.get('/dailyrents/start/:startdate/end/:enddate',(req,res)=>{
+/*router.get('/dailyrents/start/:startdate/end/:enddate',(req,res)=>{
 	var contractnoList = [];
 	alirdspool.query('SELECT title,contractno  FROM tbl_house',(err,result)=>{
 		if(err)
@@ -45,7 +45,7 @@ router.get('/dailyrents/start/:startdate/end/:enddate',(req,res)=>{
 	});
 	//console.log(contractnoList);
 	
-})
+})*/
 
 
 router.get('/ali/list',(req,res)=>{
@@ -82,9 +82,71 @@ router.get('/ali/list',(req,res)=>{
 	})
 })
 
+router.get('/:id',(req,res)=>{
+	alirdspool.query("select os.title as channelName, ch.ispay as payType,ch.cost as rentMoney,ch.startdate as checkintime, ch.enddate as checkouttime,ch.customername as customer, ch.memo as handwork_desc,b.title as hotelName , ch.cost as rentMoney, h.houseno as roomName, ch.customermobile as telno, ch.status, ch.id as orderId from tbl_house_checkin as ch join tbl_house as h on ch.house = h.id join tbl_building as b on h.building = b.id left join tbl_ordersource as os on ch.ordersource = os.id where ch.`id` =?",
+		req.params.id,(err,result)=>{
+		if(err) {console.log(err);}
+		else
+		{
+			result.map((item)=>{
+				var rentalType = '';
+				var startdate = moment(item.checkintime);
+				var enddate = moment(item.checkouttime);
+				var diffmonth = enddate.diff(startdate,'month');
+				if(diffmonth==0) rentalType='日租';
+				if(diffmonth>0&&diffmonth<=6) rentalType='中短租';
+				if(diffmonth>6) rentalType='长租';
+				
+				item.rentalType = rentalType;
+
+				switch(item.status)
+				{
+					case '1':
+						item.statusName = '已入住';
+						break;
+					case '0':
+						item.statusName = '未入住';
+						break;
+					case '2':
+						item.statusName = '已退房';
+						break;	
+				};
+
+				switch(item.payType)
+				{
+					case '1':
+						item.payType = '到店现付';
+						break;
+					case '2':
+						item.payType = '已担保';
+						break;
+					case '3':
+						item.payType = '全额支付';
+						break;
+					case '4':
+						item.payType = '部分预付';
+						break;	
+					default:
+						item.payType ='请看备注';
+
+				}
+
+			})
+		}
+		if(result.length >0){
+			res.json(result[0]).end();
+		}
+		else{
+			res.status(404).json({msg:"no record found"});
+		}
+					
+	})
+})
+
+
 //get checkins from production
 router.get('/checkins/date/:date',(req,res)=>{
-	alirdspool.query("select os.title as channelName, ch.ispay as payType,ch.cost as rentMoney,ch.startdate as checkintime, ch.enddate as checkouttime,ch.customername as customer, ch.memo as handwork_desc,b.title as hotelName , ch.cost as rentMoney, h.houseno as roomName, ch.customermobile as telno, ch.status from tbl_house_checkin as ch join tbl_house as h on ch.house = h.id join tbl_building as b on h.building = b.id left join tbl_ordersource as os on ch.ordersource = os.id where (cast(ch.startdate as date) = ? and ch.status=0) or (cast(ch.checkindate as date) = ? and ch.status=1) or (cast(ch.checkindate as date) = ? and ch.status=2)",
+	alirdspool.query("select os.title as channelName, ch.ispay as payType,ch.cost as rentMoney,ch.startdate as checkintime, ch.enddate as checkouttime,ch.customername as customer, ch.memo as handwork_desc,b.title as hotelName , ch.cost as rentMoney, h.houseno as roomName, ch.customermobile as telno, ch.status, ch.id as orderId from tbl_house_checkin as ch join tbl_house as h on ch.house = h.id join tbl_building as b on h.building = b.id left join tbl_ordersource as os on ch.ordersource = os.id where (cast(ch.startdate as date) = ? and ch.status=0) or (cast(ch.checkindate as date) = ? and ch.status=1) or (cast(ch.checkindate as date) = ? and ch.status=2)",
 		[req.params.date,req.params.date,req.params.date],(err,result)=>{
 		if(err) {console.log(err);}
 		else
