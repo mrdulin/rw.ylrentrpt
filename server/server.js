@@ -109,6 +109,27 @@ app.post('/authenticate', (req, res) => {
 })
 
 
+app.post('/getAppToken', (req, res) => {
+    console.log(req.body.appID,req.body.appSecret);
+    if(req.body.appID&&req.body.appSecret){
+            if(req.body.appID == config.appID && req.body.appSecret == config.appSecret){
+                    var token = jwt.sign({appName:"web App YLReborn"},config.secret);
+                    res.json({
+                        success: true,
+                        message: 'token for application',
+                        token: token
+                    });
+            }
+            else{
+                res.status(401).json('need appid or appSecret');
+            }
+    }
+    else{
+        res.status(401).json('need appid or appSecret');
+    }
+})
+
+
 app.use('/pass', route.DdingPass);
 
 app.listen('3000');
