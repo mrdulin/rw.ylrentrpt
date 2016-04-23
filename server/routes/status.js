@@ -11,7 +11,7 @@ var _ = require('lodash');
 router.get('/summary/date/:date',(req,res)=>{
 	alirdspool.query("select count(*) as totalRooms, b.title as hotel ,b.id as hotelid from tbl_house as h join tbl_building as b on h.building = b.id where  h.isdel!=0 group by b.id ",(err,result)=>{
 		var hotellist = [];
-		if(err) {console.log(err)}
+		if(err) {console.log(err);res.status(500).json(err);return;}
 		else
 		{
 			async.each(result,
@@ -148,5 +148,117 @@ router.post('/',(req,res)=>{
 	console.log(req.body);
 })
 
+router.get('/contractno/:contractno/start/:startdate/end/:enddate',(req,res)=>{
+	alirdspool.query("select h.`houseno` ,h.`contractno` ,s.`status` ,s.`orderno` ,ch.`startdate` ,ch.`enddate` ,ch.`memo` ,ch.`checkindate` ,ch.customername,ch.`checkoutdate`,os.title as channelName  from `tbl_house_status` as s join `tbl_house_checkin` as ch on s.`orderno` = ch.`checkno` join tbl_house as h on s.`house` = h.`id` join tbl_ordersource as os on ch.ordersource = os.id where h.`contractno` = ? and (s.`housedate`  BETWEEN ? and ?) GROUP BY s.`orderno` ORDER BY ch.`startdate`  ",
+		[req.params.contractno,req.params.startdate,req.params.enddate],
+		(err,result)=>{
+			if(err){
+				console.log(err);
+				res.status(500).json(err).end();
+				return;
+			}
+			else{
+				result.map((item)=>{
+					if(item.checkindate){
+						item.startdate = item.checkindate;
+					}
+					if(item.checkoutdate){
+						item.enddate = item.checkoutdate;
+					}
+				});
+
+				var orderStatusList = result;
+				//get non-order related status
+				alirdspool.query("SELECT h.`houseno` ,h.`contractno` ,s.`status`,s.`status`, s.`housedate` as startdate,s.`housedate` as enddate from `tbl_house_status` as s join `tbl_house` as h on s.`house` =h.`id` WHERE h.`contractno` = 493 and s.orderno is NULL and (s.`housedate`  BETWEEN '2016-4-20' and '2016-5-23')",
+					(err,result)=>{
+						if(err){
+							console.log(err);
+							res.status(500).json(err).end();
+							return;
+						}
+						else{
+							result.map((item)=>{
+								item.memo = item.channelName = item.orderno = null;
+							})
+							result = result.concat(orderStatusList);
+							result.map((item)=>{
+								if(item.status == 1){
+									result.splice(item);
+									//continue;
+								}
+								switch(item.status)
+								{
+								case '2':
+								  item.statusName = '维修';
+								  break;
+								case '3':
+								  item.statusName = '在住';
+								  break;
+								case '0':
+								  item.statusName = '已退房';
+								  break;
+								case '5':
+								  item.statusName = '已预定';
+								  break;
+								case '7':
+								  item.statusName = '装修';
+								  break;
+								case '8':
+								  item.statusName ='开荒打扫';
+								  break;
+								case '9':
+								  item.statusName = '交房';
+								  break;
+								case '10':
+								  item.statusName = '未交房';
+								  break;
+								case '11':
+								  item.statusName = '未装修';
+								  break;
+								case '12':
+								  item.statusName = '装修中';
+								  break;
+								case '13':
+								  item.statusName = '待送家具';
+								  break;
+								case '14':
+								  item.statusName = '长租准备';
+								  break;
+								 case '15':
+								   item.statusName = '保洁';
+								   break;
+								default:
+								  item.oooReason = '未定义房态';
+								}
+							})
+
+							res.json(_.orderBy(result.concat(orderStatusList),'startdate'));
+						}
+				})	
+
+				
+			}
+	})
+})
+
+router.get('/test',(req,res)=>{
+	alirdspool.query("SELECT h.`houseno` ,h.`contractno` ,s.`status`,s.`status`, s.`housedate` as startdate,s.`housedate` as enddate from `tbl_house_status` as s join `tbl_house` as h on s.`house` =h.`id` WHERE h.`contractno` = 493 and s.orderno is NULL and (s.`housedate`  BETWEEN '2016-4-20' and '2016-5-23')",
+		(err,result)=>{
+			if(err){
+				console.log(err);
+				res.status(500).json(err).end();
+				return;
+			}
+			else{
+				/*result.map((item)=>{
+					if()
+				})*/
+				result.map((item)=>{
+					item.memo = item.channelName = item.orderno = null;
+				})
+				res.json(result);
+			}
+	})	
+})
 
 exports = module.exports = router;
