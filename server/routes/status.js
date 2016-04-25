@@ -6,6 +6,7 @@ var alirdspool = require('../service/alimysqlConnect');
 var async = require('async');
 var moment = require('moment');
 var _ = require('lodash');
+var LeaseApartment = require('../model/leaseApartment');
 
 //get status summary for production mysql
 router.get('/summary/date/:date',(req,res)=>{
@@ -142,26 +143,6 @@ router.post('/',(req,res)=>{
 			}
 		});
 		
-		
-		/*alirdspool.query("select keystatus as lockType, contractno, title FROM `tbl_house` where contractno in ("+queryrooms+")",(err,result)=>{
-			if(err){
-				res.status(500).json(err);
-			}
-			else{
-				result.map((item)=>{
-					console.log(item);
-					var found =  _.find(statusList,(o)=>{
-						return o.contractno == item.contractno;
-					});
-					if(found){
-						found.lockType = item.lockType;
-					}
-					
-				})
-				res.json(statusList);
-			}
-		})*/
-
 		//add locktype for the rooms don't have status yet
 		async.each(statusList,
 			(item,callback)=>{
@@ -215,7 +196,8 @@ router.get('/contractno/:contractno/start/:startdate/end/:enddate',(req,res)=>{
 
 				var orderStatusList = result;
 				//get non-order related status
-				alirdspool.query("SELECT h.`houseno` ,h.`contractno` ,s.`status`,s.`status`, s.`housedate` as startdate,s.`housedate` as enddate from `tbl_house_status` as s join `tbl_house` as h on s.`house` =h.`id` WHERE h.`contractno` = 493 and s.orderno is NULL and (s.`housedate`  BETWEEN '2016-4-20' and '2016-5-23')",
+				alirdspool.query("SELECT h.`houseno` ,h.`contractno` ,s.`status`,s.`status`, s.`housedate` as startdate,s.`housedate` as enddate from `tbl_house_status` as s join `tbl_house` as h on s.`house` =h.`id` WHERE h.`contractno` = ? and s.orderno is NULL and (s.`housedate`  BETWEEN ? and ?)",
+					[req.params.contractno,req.params.startdate,req.params.enddate],
 					(err,result)=>{
 						if(err){
 							console.log(err);
@@ -305,7 +287,7 @@ router.get('/test/:contractno',(req,res)=>{
 })
 
 router.get('/test',(req,res)=>{
-	alirdspool.query("select id,title,contractno from tbl_house where isdel = 1",(err,result1)=>{
+	alirdspool.query("select h.id,h.`houseno` ,h.keystatus as lockType,h.contractno,h.ting,h.`shi` ,h.`wei` ,h.`structurearea`,h.`costmonth`,h.`address`,b.`title` as community from tbl_house as h JOIN `tbl_building` as b on h.`building` = b.`id`  where h.isdel = 1",(err,result1)=>{
 		if(err){
 			res.status(500).json(err);
 		}
