@@ -82,7 +82,7 @@ router.post('/',(req,res)=>{
 	var statusList = [];
 	var query = alirdspool.query("select h.`contractno`,s.`status` , h.keystatus as lockType FROM `tbl_house` as h  left JOIN `tbl_house_status` as s on h.`id` = s.`house`  WHERE s.`housedate` = CURDATE() and h.`contractno` in ("+queryrooms+")",(err,result)=>{
 		console.log(query.sql);
-		
+		console.log(result);
 		req.body.rooms.map((item)=>{
 			 var found = _.find(result,(i)=>{
 				return i.contractno == item;
@@ -138,7 +138,7 @@ router.post('/',(req,res)=>{
 			}
 			else
 			{
-				statusList.push({contractno:item.contractno,status:1,statusName:"空房",lockType:item.lockType});
+				statusList.push({contractno:item,status:1,statusName:"空房",lockType:999});
 			}
 		});
 		
@@ -161,7 +161,33 @@ router.post('/',(req,res)=>{
 				res.json(statusList);
 			}
 		})*/
-		res.json(statusList);
+
+		//add locktype for the rooms don't have status yet
+		async.each(statusList,
+			(item,callback)=>{
+				if(item.lockType == 999){
+					alirdspool.query("select h.keystatus as lockType FROM `tbl_house` as h where h.contractno = ?",
+					item.contractno,
+					(err,result)=>{
+						if(err){
+							res.status(500).json(err);
+							callback();
+						}
+						else{
+							item.lockType = result[0].lockType;
+							callback();
+						}
+					}
+					)
+				}
+				else{
+					callback();
+				}
+			},
+			(err)=>{
+				res.json(statusList);
+			}
+			)
 		
 	})
 })
@@ -344,6 +370,7 @@ function CheckifReadyforLeasing(result,item) {
 		return {leased:false}
 	}
 }
+
 
 
 exports = module.exports = router;
