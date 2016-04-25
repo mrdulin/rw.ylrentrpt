@@ -17,7 +17,6 @@ router.get('/summary/date/:date',(req,res)=>{
 			async.each(result,
 
 			(item,callback)=>{
-				console.log('handling ',item.hotel);
 				alirdspool.query("select count(*) as occupyRoomCount from tbl_house_status as s join tbl_house as h on s.house =h.id join tbl_building as b on h.building = b.id where b.id = ? and s.housedate=? and s.status!=1 and  h.isdel!=0 ",[item.hotelid,req.params.date],(err,result)=>{
 					
 					if(err) {console.log(err)}
@@ -81,7 +80,7 @@ router.post('/',(req,res)=>{
 	if(!req.body.rooms){res.json("no info").end();return;}
 	var queryrooms = _.join(req.body.rooms,',');
 	var statusList = [];
-	var query = alirdspool.query("select h.`contractno`,s.`status`  FROM `tbl_house` as h  left JOIN `tbl_house_status` as s on h.`id` = s.`house`  WHERE s.`housedate` = CURDATE() and h.`contractno` in ("+queryrooms+")",(err,result)=>{
+	alirdspool.query("select h.`contractno`,s.`status`  FROM `tbl_house` as h  left JOIN `tbl_house_status` as s on h.`id` = s.`house`  WHERE s.`housedate` = CURDATE() and h.`contractno` in ("+queryrooms+")",(err,result)=>{
 		req.body.rooms.map((item)=>{
 			 var found = _.find(result,(i)=>{
 				return i.contractno == item;
@@ -137,19 +136,33 @@ router.post('/',(req,res)=>{
 			}
 			else
 			{
-				statusList.push({contractno:item,status:1,statusName:"空房"});
+				statusList.push({contractno:item.contractno,status:1,statusName:"空房"});
 			}
 		});
-		res.json(statusList);
+		
+		
+		alirdspool.query("select keystatus as lockType, contractno, title FROM `tbl_house` where contractno in ("+queryrooms+")",(err,result)=>{
+			if(err){
+				res.status(500).json(err);
+			}
+			else{
+				result.map((item)=>{
+					console.log(item);
+					_.find(statusList,(o)=>{
+						return o.contractno == item.contractno;
+					}).lockType = item.lockType;
+				})
+				res.json(statusList);
+			}
+		})
+		
 	})
-
-
-
-	console.log(req.body);
 })
 
+
+// get the room status for the house within a specific period 
 router.get('/contractno/:contractno/start/:startdate/end/:enddate',(req,res)=>{
-	alirdspool.query("select h.`houseno` ,h.`contractno` ,s.`status` ,s.`orderno` ,ch.`startdate` ,ch.`enddate` ,ch.`memo` ,ch.`checkindate` ,ch.customername,ch.`checkoutdate`,os.title as channelName  from `tbl_house_status` as s join `tbl_house_checkin` as ch on s.`orderno` = ch.`checkno` join tbl_house as h on s.`house` = h.`id` join tbl_ordersource as os on ch.ordersource = os.id where h.`contractno` = ? and (s.`housedate`  BETWEEN ? and ?) GROUP BY s.`orderno` ORDER BY ch.`startdate`  ",
+	alirdspool.query("select h.`houseno` ,h.`contractno` ,s.`status` ,s.`orderno` ,ch.`startdate` ,DATE( DATE_SUB( ch.`enddate`  , INTERVAL 1 DAY ) ) as enddate ,ch.`memo` ,ch.`checkindate` ,ch.customername,ch.`checkoutdate`,os.title as channelName  from `tbl_house_status` as s join `tbl_house_checkin` as ch on s.`orderno` = ch.`checkno` join tbl_house as h on s.`house` = h.`id` join tbl_ordersource as os on ch.ordersource = os.id where h.`contractno` = ? and (s.`housedate`  BETWEEN ? and ?) GROUP BY s.`orderno` ORDER BY ch.`startdate`  ",
 		[req.params.contractno,req.params.startdate,req.params.enddate],
 		(err,result)=>{
 			if(err){
@@ -179,6 +192,7 @@ router.get('/contractno/:contractno/start/:startdate/end/:enddate',(req,res)=>{
 						else{
 							result.map((item)=>{
 								item.memo = item.channelName = item.orderno = null;
+								//item.startdate = item.enddate = moment(item.startdate).format('YYYY-MM-DD');
 							})
 							result = result.concat(orderStatusList);
 							result.map((item)=>{
@@ -232,7 +246,7 @@ router.get('/contractno/:contractno/start/:startdate/end/:enddate',(req,res)=>{
 								}
 							})
 
-							res.json(_.orderBy(result.concat(orderStatusList),'startdate'));
+							res.json(_.orderBy(result,'startdate'));
 						}
 				})	
 
@@ -241,24 +255,78 @@ router.get('/contractno/:contractno/start/:startdate/end/:enddate',(req,res)=>{
 	})
 })
 
-router.get('/test',(req,res)=>{
-	alirdspool.query("SELECT h.`houseno` ,h.`contractno` ,s.`status`,s.`status`, s.`housedate` as startdate,s.`housedate` as enddate from `tbl_house_status` as s join `tbl_house` as h on s.`house` =h.`id` WHERE h.`contractno` = 493 and s.orderno is NULL and (s.`housedate`  BETWEEN '2016-4-20' and '2016-5-23')",
-		(err,result)=>{
-			if(err){
-				console.log(err);
-				res.status(500).json(err).end();
-				return;
+router.get('/test/:contractno',(req,res)=>{
+	alirdspool.query("select s.`status` ,ch.`startdate` ,ch.`enddate` ,ch.`checkindate` , ch.`checkoutdate` , ch.`ordersource` ,h.`title` ,h.`contractno` from `tbl_house_status` as s JOIN `tbl_house_checkin` as ch on s.`orderno` = ch.`checkno` join tbl_house as h on s.`house` = h.`id`  where h.`contractno` = ?  and s.`housedate` > NOW() and (s.`status` in (3,5)) GROUP BY s.`orderno`",
+			req.params.contractno,
+			(err,result)=>{
+				if(err){
+					res.status(500).json(err);
+				}
+				else{
+					res.json(CheckifReadyforLeasing(result));
+				}
+
 			}
-			else{
-				/*result.map((item)=>{
-					if()
-				})*/
-				result.map((item)=>{
-					item.memo = item.channelName = item.orderno = null;
-				})
-				res.json(result);
-			}
-	})	
+		)
 })
+
+router.get('/test',(req,res)=>{
+	console.log('in...');
+	alirdspool.query("select id,title,contractno from tbl_house where isdel = 1",(err,result1)=>{
+		if(err){
+			res.status(500).json(err);
+		}
+		else{
+			async.each(result1,
+			(item,callback)=>{
+				alirdspool.query("select s.`status` ,ch.`startdate` ,ch.`enddate` ,ch.`checkindate` , ch.`checkoutdate` , ch.`ordersource` ,h.`title` ,h.`contractno` from `tbl_house_status` as s JOIN `tbl_house_checkin` as ch on s.`orderno` = ch.`checkno` join tbl_house as h on s.`house` = h.`id`  where h.`id` = ?  and s.`housedate` > NOW() and (s.`status` in (3,5)) GROUP BY s.`orderno`",
+				item.id,
+				(err,result)=>{
+					item.lease = CheckifReadyforLeasing(result);
+					callback();
+				});
+			},
+			(err)=>{
+				if(err){
+					res.status(500).json(err);
+				}
+				res.json(result1);
+			}
+
+			)
+		}
+	})
+})
+
+function CheckifReadyforLeasing(result) {
+	//console.log(result);
+	var lease = result.map((item)=>{
+		forleasing = true;
+		var startdate = moment(item.startdate);
+		var enddate = moment(item.enddate);
+		var now = moment();
+		// if the order is in progress
+		if(now > startdate && now < enddate){
+			// if order still have 60 days to finish, consider as not available for leasing
+			if(enddate.diff(now,'days') > 60 ){
+				return {leasing:'长租已租',start:item.startdate,end:item.enddate};
+			}
+		}
+		// order is not in progress yet
+		else{
+			// if order dates is more than 90 days or order source is 长租 
+			if(enddate.diff(startdate,'days') > 90 || item.ordersource == 19){
+				return {leasing:'长租已租',start:item.startdate,end:item.enddate};
+			}
+		}
+	});
+	if(lease.length > 0){
+		return lease[0];
+	}
+	else{
+		return {leasing:'可租'}
+	}
+}
+
 
 exports = module.exports = router;
