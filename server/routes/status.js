@@ -146,24 +146,28 @@ router.post('/',(req,res)=>{
 		//add locktype for the rooms don't have status yet
 		async.each(statusList,
 			(item,callback)=>{
-				if(item.lockType == 999){
-					alirdspool.query("select h.keystatus as lockType FROM `tbl_house` as h where h.contractno = ?",
-					item.contractno,
-					(err,result)=>{
-						if(err){
-							res.status(500).json(err);
-							callback();
+				CheckApartmentIsforLeasing(item.contractno).then((lease)=>{
+					item.leased = lease.leased;
+					if(item.lockType == 999){
+						alirdspool.query("select h.keystatus as lockType FROM `tbl_house` as h where h.contractno = ?",
+						item.contractno,
+						(err,result)=>{
+							if(err){
+								res.status(500).json(err);
+								callback();
+							}
+							else{
+								item.lockType = result[0].lockType;
+								callback();
+							}
+
 						}
-						else{
-							item.lockType = result[0].lockType;
-							callback();
-						}
+						)
 					}
-					)
-				}
-				else{
-					callback();
-				}
+					else{
+						callback();
+					}
+				})
 			},
 			(err)=>{
 				res.json(statusList);
@@ -271,19 +275,10 @@ router.get('/contractno/:contractno/start/:startdate/end/:enddate',(req,res)=>{
 })
 
 router.get('/test/:contractno',(req,res)=>{
-	var query = alirdspool.query("select s.`status` ,ch.`startdate` ,ch.`enddate` ,ch.`checkindate` , ch.`checkoutdate` , ch.`ordersource` ,h.`title` ,h.`contractno` from `tbl_house_status` as s JOIN `tbl_house_checkin` as ch on s.`orderno` = ch.`checkno` join tbl_house as h on s.`house` = h.`id`  where h.`contractno` = ?  and s.`housedate` > NOW() and (s.`status` in (3,5)) GROUP BY s.`orderno`",
-			req.params.contractno,
-			(err,result)=>{
-				console.log(query.sql);
-				if(err){
-					res.status(500).json(err);
-				}
-				else{
-					res.json(CheckifReadyforLeasing(result));
-				}
+	CheckApartmentIsforLeasing(req.params.contractno).then((lease)=>{
+		res.json(lease);
+	})
 
-			}
-		)
 })
 
 router.get('/test',(req,res)=>{
@@ -310,7 +305,11 @@ router.get('/test',(req,res)=>{
 				if(err){
 					res.status(500).json(err);
 				}
-				res.json(result1);
+				var list = _.filter(result1,(o)=>{
+					return o.leased == false;
+				});
+				FindAppartment(list);
+				res.json(list);
 			}
 
 			)
@@ -353,6 +352,52 @@ function CheckifReadyforLeasing(result,item) {
 	}
 }
 
+function CheckApartmentIsforLeasing(contractno){
+	 return new Promise((resolve, reject) =>{
+	 	alirdspool.query("select s.`status` ,ch.`startdate` ,ch.`enddate` ,ch.`checkindate` , ch.`checkoutdate` , ch.`ordersource` ,h.`title` ,h.`contractno` from `tbl_house_status` as s JOIN `tbl_house_checkin` as ch on s.`orderno` = ch.`checkno` join tbl_house as h on s.`house` = h.`id`  where h.`contractno` = ?  and s.`housedate` > NOW() and (s.`status` in (3,5)) GROUP BY s.`orderno`",
+	 			contractno,
+	 			(err,result)=>{
+	 				if(err){
+	 					console.log(err);
+	 					reject(err);
+	 				}
+	 				else{
+	 					resolve(CheckifReadyforLeasing(result));
+	  				}
+
+	 			}
+	 		);
+	 	//resolve('done');
+	 })
+}
+
+function UpdateOrInsertLeasingApartment(apartments){
+	
+
+	apartments.map((item)=>{
+		var apartObj = new LeaseApartment({
+			houseid: item.id, 
+			houseno: item.houseno,
+			contractno: item.contractno,
+			ting:item.ting,
+			shi:item.shi,
+			wei:item.wei,
+			costmonth:item.costmonth,
+			address:item.address,
+			community:item.community,
+			leased:item.leased
+		});
+		apartObj.save(function (err) {
+                if (err) throw err;
+                console.log('house saved');
+            });
+		console.log(apartObj);
+	})
+}
+
+function FindAppartment(apartments){
+
+}
 
 
 exports = module.exports = router;

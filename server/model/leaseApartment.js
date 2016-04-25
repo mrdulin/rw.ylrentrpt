@@ -17,3 +17,4 @@ module.exports = mongoose.model('leaseApartment', new Schema({
   versionKey: false,
   timestamps:true
 }));
+
