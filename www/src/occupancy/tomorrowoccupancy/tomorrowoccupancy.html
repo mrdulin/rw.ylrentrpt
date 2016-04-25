@@ -43,6 +43,7 @@
                                 </span>
                             </th>
                             <th>房号</th>
+                            <th>房源编号</th>
                             <th>入住客人</th>
                             <th class="cursor-pointer" ng-click="vm.order('statusName');">
                                 入住状态
@@ -64,6 +65,7 @@
                         <tr ng-repeat="data in vm.datas | filter: {rentalType: vm.rentType === '全部' ? '' : vm.rentType} | orderBy:vm.predicate:vm.reverse as filterDatas">
                             <td ng-bind="::data.hotelName"></td>
                             <td ng-bind="::data.roomName"></td>
+                            <td ng-bind="::data.contractno"></td>
                             <td ng-bind="::data.customer"></td>
                             <td ng-bind="::data.statusName"></td>
                             <td ng-bind="::vm.formatDate(data.checkintime)"></td>
