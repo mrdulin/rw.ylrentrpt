@@ -305,11 +305,8 @@ router.get('/test',(req,res)=>{
 				if(err){
 					res.status(500).json(err);
 				}
-				var list = _.filter(result1,(o)=>{
-					return o.leased == false;
-				});
-				FindAppartment(list);
-				res.json(list);
+				UpdateOrInsertLeasingApartment(result1);
+				res.json(result1);
 			}
 
 			)
@@ -373,25 +370,19 @@ function CheckApartmentIsforLeasing(contractno){
 
 function UpdateOrInsertLeasingApartment(apartments){
 	
-
+	console.log("================",apartments.length);
 	apartments.map((item)=>{
-		var apartObj = new LeaseApartment({
-			houseid: item.id, 
-			houseno: item.houseno,
-			contractno: item.contractno,
-			ting:item.ting,
-			shi:item.shi,
-			wei:item.wei,
-			costmonth:item.costmonth,
-			address:item.address,
-			community:item.community,
-			leased:item.leased
-		});
-		apartObj.save(function (err) {
-                if (err) throw err;
-                console.log('house saved');
-            });
-		console.log(apartObj);
+		var query = {houseid:item.id};
+		var option = {upsert: true};
+		LeaseApartment.update(query,item,option,(err,result)=>{
+			if(err){
+				console.log(err);
+			}
+			else{
+				console.log(result);
+			}
+		})
+		
 	})
 }
 

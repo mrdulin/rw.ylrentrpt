@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 
 // set up a mongoose model
 module.exports = mongoose.model('leaseApartment', new Schema({ 
-	houseid: String, 
+	id: String, 
 	houseno: String,
 	contractno: String,
 	ting:Number,
