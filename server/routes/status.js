@@ -180,6 +180,7 @@ router.post('/',(req,res)=>{
 
 // get the room status for the house within a specific period 
 router.get('/contractno/:contractno/start/:startdate/end/:enddate',(req,res)=>{
+	console.log('startdate:',req.params.startdate,' enddate:',req.params.enddate);
 	alirdspool.query("select h.`houseno` ,h.`contractno` ,s.`status` ,s.`orderno` ,ch.`startdate` ,DATE( DATE_SUB( ch.`enddate`  , INTERVAL 1 DAY ) ) as enddate ,ch.`memo` ,ch.`checkindate` ,ch.customername,ch.`checkoutdate`,os.title as channelName  from `tbl_house_status` as s join `tbl_house_checkin` as ch on s.`orderno` = ch.`checkno` join tbl_house as h on s.`house` = h.`id` join tbl_ordersource as os on ch.ordersource = os.id where h.`contractno` = ? and (s.`housedate`  BETWEEN ? and ?) GROUP BY s.`orderno` ORDER BY ch.`startdate`  ",
 		[req.params.contractno,req.params.startdate,req.params.enddate],
 		(err,result)=>{
