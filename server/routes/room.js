@@ -4,6 +4,7 @@ var pool = require('../service/mysqlConnect');
 var moment = require('moment');
 var error = require('../error.js')
 var alirdspool = require('../service/alimysqlConnect');
+var LeaseApartment = require('../model/leaseApartment');
 router.get('/:roomNo',(req,res)=> {
 	console.log('in');
 	pool.query('select r.roomName, r.roomNo,r.hasLock,r.hotelNo,h.hotelName,t.roomTypeNo,t.roomTypeName,t.roomTypePrice from room as r join room_type as t on r.roomTypeNo = t.roomTypeNo join hotel as h on r.hotelNo = h.hotelNo where r.roomNo = ?', req.params.roomNo,(err,result)=>{
@@ -185,6 +186,22 @@ router.get('/find/:roomName',(req,res)=>{
 			})
 			res.json(result);
 		}
+	})
+})
+
+
+router.post('/forlease/page/:page/size/:size',(req,res)=>{
+	console.log(req.body);
+	//default query all
+	var query = {leased:false};
+	if(req.body){
+		query = req.body;
+		query.leased = false;
+	}
+	 
+	LeaseApartment.paginate(query,{page: parseInt(req.params.page), limit: parseInt(req.params.size)},(err,result)=>{
+		console.log(req.params.page,' ',req.params.size);
+		res.json(result);
 	})
 })
 

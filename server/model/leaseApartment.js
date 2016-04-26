@@ -1,8 +1,9 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-
+var mongoosePaginate = require('mongoose-paginate');
 // set up a mongoose model
-module.exports = mongoose.model('leaseApartment', new Schema({ 
+
+var schema = new Schema({ 
 	id: String, 
 	houseno: String,
 	contractno: String,
@@ -12,9 +13,14 @@ module.exports = mongoose.model('leaseApartment', new Schema({
 	costmonth:Number,
 	address:String,
 	community:String,
-	leased:Boolean
+	leased:Boolean,
+	communityID:String
 }, {
   versionKey: false,
   timestamps:true
-}));
+});
+
+schema.plugin(mongoosePaginate);
+
+module.exports = mongoose.model('leaseApartment', schema);
 

@@ -6,7 +6,7 @@ var error = require('../error.js');
 var alirdspool = require('../service/alimysqlConnect');
 
 router.get('/',(req,res)=>{
-	alirdspool.query('select id as hotelNo, title as hotelName from tbl_building',(err,result)=>{
+	alirdspool.query('select id as hotelNo, title as hotelName ,id as communityId, title as CommunityName from tbl_building',(err,result)=>{
 		if(err)
 		{
 			res.status(500).json(err);
@@ -17,6 +17,7 @@ router.get('/',(req,res)=>{
 		}
 	})
 })
+
 
 
 exports = module.exports = router;

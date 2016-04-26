@@ -282,7 +282,7 @@ router.get('/test/:contractno',(req,res)=>{
 })
 
 router.get('/test',(req,res)=>{
-	alirdspool.query("select h.id,h.`houseno` ,h.keystatus as lockType,h.contractno,h.ting,h.`shi` ,h.`wei` ,h.`structurearea`,h.`costmonth`,h.`address`,b.`title` as community from tbl_house as h JOIN `tbl_building` as b on h.`building` = b.`id`  where h.isdel = 1",(err,result1)=>{
+	alirdspool.query("select h.id,h.`houseno` ,h.keystatus as lockType,h.contractno,h.ting,h.`shi` ,h.`wei` ,h.`structurearea`,h.`costmonth`,h.`address`,b.`title` as community, b.id as communityID from tbl_house as h JOIN `tbl_building` as b on h.`building` = b.`id`  where h.isdel = 1",(err,result1)=>{
 		if(err){
 			res.status(500).json(err);
 		}
@@ -317,7 +317,8 @@ router.get('/test',(req,res)=>{
 function CheckifReadyforLeasing(result,item) {
 	//console.log(result);
 	if(!result) { console.log('no result',item); return {leased:false};}
-	var lease = result.map((item)=>{
+	var lease ;
+	result.map((item)=>{
 		forleasing = true;
 		var startdate = moment(item.startdate);
 		var enddate = moment(item.enddate);
@@ -326,14 +327,16 @@ function CheckifReadyforLeasing(result,item) {
 		if(now > startdate && now < enddate){
 			// if order still have 60 days to finish, consider as not available for leasing
 			if(enddate.diff(now,'days') > 60 ){
-				return {leased:true,start:item.startdate,end:item.enddate};
+				lease =  {leased:true,start:item.startdate,end:item.enddate};
+				return;
 			}
 		}
 		// order is not in progress yet
 		else{
 			// if order dates is more than 90 days or order source is 长租 
 			if(enddate.diff(startdate,'days') > 90 || item.ordersource == 19){
-				return {leased:true,start:item.startdate,end:item.enddate};
+				lease = {leased:true,start:item.startdate,end:item.enddate};
+				return;
 			}
 		}
 
@@ -341,8 +344,8 @@ function CheckifReadyforLeasing(result,item) {
 
 		return;
 	});
-	if(lease.length > 0 && lease[0]){
-		return lease[0];
+	if(lease){
+		return lease;
 	}
 	else{
 		return {leased:false}
