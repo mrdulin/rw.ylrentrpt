@@ -213,7 +213,7 @@ router.get('/contractno/:contractno/start/:startdate/end/:enddate',(req,res)=>{
 						else{
 							result.map((item)=>{
 								item.memo = item.channelName = item.orderno = null;
-								//item.startdate = item.enddate = moment(item.startdate).format('YYYY-MM-DD');
+								item.startdate = item.enddate = moment(item.startdate).format('YYYY-MM-DD');
 							})
 							result = result.concat(orderStatusList);
 							result.map((item)=>{
