@@ -6,7 +6,7 @@ var alirdspool  = mysql.createPool({
 	user:'nodeclient',
 	password:'Pass_word',
 	database:'yuanlai',
-	timezone:'utc'  // this is for time convert 
+	timezone:'0800'  // this is for time convert 
 
 });
 

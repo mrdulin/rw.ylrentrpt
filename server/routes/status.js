@@ -221,6 +221,10 @@ router.get('/contractno/:contractno/start/:startdate/end/:enddate',(req,res)=>{
 									result.splice(item);
 									//continue;
 								}
+
+								item.startdate = moment(item.startdate).format('YYYY-MM-DD');
+								item.enddate = moment(item.enddate).format('YYYY-MM-DD');
+
 								switch(item.status)
 								{
 								case '2':
@@ -335,8 +339,8 @@ function CheckifReadyforLeasing(result,item) {
 		}
 		// order is not in progress yet
 		else{
-			// if order dates is more than 90 days or order source is 长租 
-			if(enddate.diff(startdate,'days') > 90 || item.ordersource == 19){
+			// if order dates is more than 60 days or order source is 长租 
+			if(enddate.diff(startdate,'days') > 60 || item.ordersource == 19){
 				lease = {leased:true,start:item.startdate,end:item.enddate};
 				return;
 			}
