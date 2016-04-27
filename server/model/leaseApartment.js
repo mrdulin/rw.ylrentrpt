@@ -14,7 +14,9 @@ var schema = new Schema({
 	address:String,
 	community:String,
 	leased:Boolean,
-	communityID:String
+	communityID:String,
+	lockType:Number,
+	structurearea:String
 }, {
   versionKey: false,
   timestamps:true
