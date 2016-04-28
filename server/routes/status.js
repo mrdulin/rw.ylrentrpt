@@ -80,6 +80,8 @@ router.get('/decoration',(req,res)=>{
 router.post('/',(req,res)=>{
 	if(!req.body.rooms){res.json("no info").end();return;}
 	var queryrooms = _.join(req.body.rooms,',');
+	console.log('queryrooms:',queryrooms);
+	console.log('request body: ', req.body);
 	var statusList = [];
 	var query = alirdspool.query("select h.`contractno`,s.`status` , h.keystatus as lockType FROM `tbl_house` as h  left JOIN `tbl_house_status` as s on h.`id` = s.`house`  WHERE s.`housedate` = CURDATE() and h.`contractno` in ("+queryrooms+")",(err,result)=>{
 		console.log(query.sql);
