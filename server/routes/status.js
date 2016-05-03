@@ -7,6 +7,7 @@ var async = require('async');
 var moment = require('moment');
 var _ = require('lodash');
 var LeaseApartment = require('../model/leaseApartment');
+var HotelSummary = require('../model/hotelSummary');
 
 //get status summary for production mysql
 router.get('/summary/date/:date',(req,res)=>{
@@ -53,6 +54,39 @@ router.get('/summary/date/:date',(req,res)=>{
 
 			(err)=>{
 				if(err) {console.log(err);};
+				var totalCounts = 0;
+				var totalOOORoomCounts = 0;
+				var totalOccupyRoomCounts = 0;
+				
+				if(moment(req.params.date).format('YYYY-MM-DD') == moment().format('YYYY-MM-DD')){
+					hotellist.map((item)=>{
+						totalCounts += item.TotalRoomCount;
+						totalOOORoomCounts += item.oooRoomCount;
+						totalOccupyRoomCounts += item.occupyRoomCount;
+					});
+
+					var query = {summaryDate:req.params.date};
+							var option = {upsert: true};
+							HotelSummary.update(
+								query,
+								{
+									summaryDate:req.params.date,
+									oOORoomCount: totalOOORoomCounts,
+									totalRoomCount: totalCounts,
+									totalOccupyRoomCounts:totalOccupyRoomCounts,
+									occupancyRate: totalOccupyRoomCounts/(totalCounts - totalOOORoomCounts)
+								},
+								option,(err,result)=>{
+								if(err){
+									console.log(err);
+								}
+								else{
+									console.log(result);
+								}
+							})
+				}			
+
+
 				res.json(hotellist);
 			})
 		}
