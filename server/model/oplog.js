@@ -11,5 +11,6 @@ module.exports = mongoose.model('OpLog', new Schema({
 	endtime:Date,
 	cellphone:String,
 	name:String,
-	passwordId:String
+	passwordId:String,
+	comments:String
 }));

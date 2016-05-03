@@ -91,7 +91,8 @@ router.post('/addpass', (req, res) => {
                             endtime: endtime,
                             cellphone: req.body.cellphone,
                             name: req.body.name,
-                            passwordId: result.id
+                            passwordId: result.id,
+                            comments:req.body.comments
                         });
                         logEntry.save(function (err) {
                             if (err) throw err;
