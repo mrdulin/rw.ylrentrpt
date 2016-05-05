@@ -201,6 +201,64 @@ router.get('/checkins/date/:date',(req,res)=>{
 	})
 })
 
+
+router.get('/checkins/start/:startdate/end/:enddate',(req,res)=>{
+	alirdspool.query("select h.contractno,os.title as channelName, ch.ispay as payType,ch.cost as rentMoney,ch.startdate as checkintime, ch.enddate as checkouttime,ch.customername as customer, ch.memo as handwork_desc,b.title as hotelName , ch.cost as rentMoney, h.houseno as roomName, ch.customermobile as telno, ch.status, ch.id as orderId from tbl_house_checkin as ch join tbl_house as h on ch.house = h.id join tbl_building as b on h.building = b.id left join tbl_ordersource as os on ch.ordersource = os.id where cast(ch.`startdate` as date) >= ? and  cast(ch.`startdate` as date) <= ? and ch.`status` !=3",
+		[req.params.startdate,req.params.enddate],(err,result)=>{
+		if(err) {console.log(err);}
+		else
+		{
+			result.map((item)=>{
+				var rentalType = '';
+				var startdate = moment(item.checkintime);
+				var enddate = moment(item.checkouttime);
+				var diffmonth = enddate.diff(startdate,'month');
+				if(diffmonth==0) rentalType='日租';
+				if(diffmonth>0&&diffmonth<=6) rentalType='中短租';
+				if(diffmonth>6) rentalType='长租';
+				
+				item.rentalType = rentalType;
+
+				switch(item.status)
+				{
+					case '1':
+						item.statusName = '已入住';
+						break;
+					case '0':
+						item.statusName = '未入住';
+						break;
+					case '2':
+						item.statusName = '已退房';
+						break;	
+				};
+
+				switch(item.payType)
+				{
+					case '1':
+						item.payType = '到店现付';
+						break;
+					case '2':
+						item.payType = '已担保';
+						break;
+					case '3':
+						item.payType = '全额支付';
+						break;
+					case '4':
+						item.payType = '部分预付';
+						break;	
+					default:
+						item.payType ='请看备注';
+
+				}
+
+			})
+		}
+
+		res.json(result).end();
+	})
+})
+
+
 //get checkouts from production
 router.use('/checkouts/date/:date',(req,res)=>{
 	alirdspool.query("select h.contractno,ch.ordersource as channelName, ch.cost as rentMoney,ch.startdate as checkintime, ch.enddate as checkouttime,ch.customername as customer, ch.memo as handwork_desc,b.title as hotelName , ch.cost as rentMoney, h.houseno as roomName, ch.customermobile as telno, ch.status,ch.id as orderId from tbl_house_checkin as ch join tbl_house as h on ch.house = h.id join tbl_building as b on h.building = b.id left join tbl_ordersource as os on ch.ordersource = os.id where (cast(ch.enddate as date) = ? and ch.status=0) or (cast(ch.enddate as date) = ? and ch.status=1) or (cast(ch.checkoutdate as date) = ? and ch.status=2)",
