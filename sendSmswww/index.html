@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>源涞国际短信发送程序</title>
+
+    <!-- Bootstrap -->
+    <link href="style/bootstrap.min.css" rel="stylesheet">
+    <link href="style/style.css" rel="stylesheet">
+    <link href="style/bootstrap-datetimepicker.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="js/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/angular.min.js"></script>
+    <script src="js/moment.min.js"></script>
+    <script src="js/av.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/bootstrap-datetimepicker.min.js"></script>
+
+  </head>
+  <body ng-app="sendSMS" ng-controller="FirstController as vm">
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">
+            源涞国际 - 短信发送程序
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="input-group" data-toggle="buttons">
+        <label class="btn btn-default active" style="margin-right: 5px; ">
+          <a ng-click="vm.setisCheckinSms(false)"><input type="radio" name="options" id="option1" autocomplete="off" checked> 带看短信</a>
+        </label>
+        <label class="btn btn-default">
+          <a ng-click="vm.setisCheckinSms(true)"><input type="radio" name="options" id="option2" autocomplete="off" >入住短信 </a>
+        </label>
+      </div>
+      <div class="input-group">
+        <span class="input-group-addon" id="basic-addon1">客户名字</span>
+        <input type="text" class="form-control" ng-model="vm.customerName" placeholder="客户名字" aria-describedby="basic-addon1">
+      </div>
+      <div class="input-group">
+        <span class="input-group-addon" id="basic-addon1">手机号码</span>
+        <input type="text" class="form-control" ng-model="vm.cellphone" placeholder="手机号码" aria-describedby="basic-addon1">
+      </div>
+      <div class="input-group">
+        <span class="input-group-addon" id="basic-addon1">预约小区</span>
+        <select class="form-control" ng-model="vm.selecteHotel"> 
+        <option ng-selected="{{hotel.value == vm.selecteHotel}}" ng-repeat="hotel in vm.hotels" value="{{hotel.value}}">{{hotel.hotelName}}</option> 
+        </select> 
+      </div>
+      <div class="input-group">
+        <span class="input-group-addon" id="basic-addon1">小区房号</span>
+         <input type="text" class="form-control" ng-model="vm.houseNo" placeholder="小区房号" aria-describedby="basic-addon1">
+      </div>
+      <div class="input-group">
+        <span class="input-group-addon" id="basic-addon1">预约时间</span>
+        <input size="16" type="text" ng-model="vm.reservedTime" readonly class="form-control form_datetime" id="dp1">
+      </div>
+      <div class="input-group" ng-if="vm.isCheckinSms">
+        <span class="input-group-addon" id="basic-addon1">离店时间</span>
+        <input size="16" type="text" ng-model="vm.checkOutTime" readonly class="form-control form_datetime" id="dp1">
+      </div>
+      <button class="input-group btn btn-primary" ng-click="vm.sendSMS()">发送短信</button>
+
+      <span>短信预览</span>
+      <br/>
+      <div ng-if="!vm.isCheckinSms">
+      尊敬的{{vm.customerName}},您已经预约带看{{vm.getHotel()}} {{vm.houseNo}},预约时间是{{vm.reservedTime}},电子地图导航{{vm.selecteHotel}},恭候您的到来
+      </div>
+      <div ng-if="vm.isCheckinSms">
+      尊敬的{{vm.customerName}},您已经预定了{{vm.getHotel()}} {{vm.houseNo}},入住时间是{{vm.reservedTime}},离店时间是{{vm.checkOutTime}},电子地图导航{{vm.selecteHotel}},恭候您的到来
+      </div>
+    </div>
+
+   
+   <script type="text/javascript">
+     $("#dp1").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
+       $("#dp2").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
+     
+   </script>
+  </body>
+</html>

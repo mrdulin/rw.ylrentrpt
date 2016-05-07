@@ -11,6 +11,7 @@ var request = require('request');
 mongoose.connect(config.database);
 app.use(bodyParser());
 app.use(express.static('../www/dist'));
+app.use('/sendsms',express.static('../sendSmswww'));
 
 app.all('*',function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
