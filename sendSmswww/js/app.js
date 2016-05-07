@@ -31,10 +31,9 @@ firstModule.controller('FirstController',function($scope){
 	}
 
 	vm.getHotel = function(){
-
-		vm.hotel = vm.hotels.find(function(item){
+		vm.hotels.map(function(item){
 			if(item.value == vm.selecteHotel)
-				return true;
+				vm.hotel = item;
 		})
 
 		return vm.hotel.hotelName;
